@@ -17,8 +17,8 @@ The main difference between RL-Glue and MORL-Glue is that MORL supports *multiob
 Several example MORL agents are included in the source distribution:
 
 - `SkeletonAgent` - A starting-point agent that selects a random action
-- `UserControlledAgent` - An example of an agent that uses user input to select an action
-- `TLO_Agent` - a Q-Learning agent that uses Thresholded Lexicographic Ordering to determing how to optimize objectives.
+- `UserControlledAgent` - An example of an agent that uses user input to select an action, which is useful for debugging new environments.
+- `TLO_Agent` - a Q-Learning agent that uses Thresholded Lexicographic Ordering to determine how to prioritize objectives, as described by [Gabor et al (1998)][gabor1998] and [Issabekov & Vamplew (2012)][issabekov2012].
   
 
 ### Included MORL Environments
@@ -75,8 +75,10 @@ Simply extract the executable into a directory and run it.
 Visual Studio 2015 solutions are available if you wish to build your own version.
 
 [rl-glue]: http://glue.rl-community.org/wiki/Main_Page
-[aligned-ai]: https://www.researchgate.net/publication/319020316_Human-Aligned_Artificial_Intelligence_is_a_Multiobjective_Problem
-[vamplew2011]: https://www.researchgate.net/publication/220343783_Empirical_evaluation_methods_for_multiobjective_reinforcement_learning_algorithms
-[vamplew2017a]: https://doi.org/10.1007/s10994-010-5232-5
+[aligned-ai]: https://www.researchgate.net/publication/319020316_Human-Aligned_Artificial_Intelligence_is_a_Multiobjective_Problem "Human-Aligned Artificial Intelligence is a Multiobjective Problem"
+[vamplew2011]: https://www.researchgate.net/publication/220343783_Empirical_evaluation_methods_for_multiobjective_reinforcement_learning_algorithms "Empirical evaluation methods for multiobjective reinforcement learning algorithms"
+[vamplew2017a]: https://doi.org/10.1016/j.neucom.2016.08.152 "Steering approaches to Pareto-optimal multiobjective reinforcement learning"
 [vamplew2017b]: https://doi.org/10.1016/j.neucom.2016.09.141 "Softmax exploration strategies for multiobjective reinforcement learning"
 [barrett2008]: https://doi.org/10.1145/1390156.1390162 "Learning all optimal policies with multiple criteria"
+[gabor1998]: http://dl.acm.org/citation.cfm?id=657298 "Multi-criteria Reinforcement Learning"
+[issabekov2012]: http://dx.doi.org/10.1007/978-3-642-35101-3_53 "An Empirical Comparison of Two Common Multiobjective Reinforcement Learning Algorithms"
