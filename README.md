@@ -39,6 +39,16 @@ MORL-Glue includes a large number of standard RL and MORL benchmark problems:
 - `SkeletonExperiment` - A starting-point experiment for MORL-Glue.
 - `DemoExperiment` - Designed for use in demonstrating the capabilities of MORL-Glue, in particular using the Generalised Deep Sea Treasure environment.
 
+### Codecs
+
+There are several "codecs" available for RL-Glue which assist in writing agents, environments and experiments.
+
+For MORL-Glue, only the Java codec is currently available.
+`JavaRLGlueCodec.jar` contains the Java codec classes, and is required for the included projects to run. A Python implementation is in development.
+
+### Running an experiment
+`MORL_Glue_Driver.java` contains an example of how to connect an experiment, an agent and an environment to MORL-Glue. Importantly, any of these could be extracted to a separate process or on a separate machine.
+
 ## Installation
 
 ### Linux
