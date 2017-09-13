@@ -4,7 +4,7 @@ MORL-Glue is a Multi-Objective Reinforcement Learning framework, adapted from [R
 
 MORL-Glue logically separates the three main components of a reinforcement learning system, allowing the environment, experiment and agent to be implemented in different programming languages, on different systems.
 
-Communication between the three is orchestrated by the MORL-Glue server, which is available for Linux and Windows systems. A Windows x64 build is available under *Releases*.
+Communication between the three is orchestrated by the MORL-Glue server, which is available for Linux and Windows systems. Windows 32-bit and 64-bit builds are available under *Releases*.
 
 Most of the documentation for RL-Glue still applies. A good starting point is the RL-Glue overview, available under the `docs` directory.
 
@@ -69,7 +69,7 @@ If you have cloned the Git repository, you may need to rerun the autotools. See 
 
 ### Windows
 
-The MORL-Glue server is available as a statically-linked stand-alone 64-bit executable for Windows (Vista or higher). 
+The MORL-Glue server is available as a statically-linked stand-alone 32 or 64-bit executable for Windows (Vista or higher). 
 Simply extract the executable into a directory and run it.
 
 Visual Studio 2015 solutions are available if you wish to build your own version.
