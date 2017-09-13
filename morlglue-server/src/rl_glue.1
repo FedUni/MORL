@@ -1,0 +1,53 @@
+.\" Copyright 2007+
+.\"	Brian Tanner, brian@tannerpages.com
+.\"
+.Dd February 12, 2009
+.Dt rl_glue 1
+.Os
+.Sh NAME
+.Nm rl_glue
+.Nd Start RL-Glue executable socket server
+
+.Sh DESCRIPTION
+Starts an executable socket server listening on port specified by environment variable 
+.Ar RLGLUE_PORT
+(default 4096).
+
+.Pp
+The following options are available:
+.Bl -tag -width indent
+.It Fl -version
+Print out the
+.Nm
+version and build information, as well as some usage instructions.
+.It Fl -pv
+Print out only the
+.Nm
+version. 
+
+.Sh EXAMPLES
+Start 
+.Nm
+on the default port (4096) listening on the default host (127.0.0.1):
+.Pp
+.Dl "rl_glue"
+.Pp
+Start 
+.Nm
+on port 5000:
+.Pp
+.Dl "RLGLUE_PORT=5000 rl_glue"
+
+.Sh ENVIRONMENT
+The following environment variables affect the execution of
+.Nm :
+.Bl -tag -width ".Ev CLICOLOR_FORCE"
+.It Ev RLGLUE_PORT
+If the environment variable
+.Ev RLGLUE_PORT
+is set, 
+.Nm
+will listen on that port.
+
+.Sh COMPATIBILITY
+Pretty compatible.

@@ -1,0 +1,1413 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>RL-Glue 3.0 Technical Details</TITLE>
+<META NAME="description" CONTENT="RL-Glue 3.0 Technical Details">
+<META NAME="keywords" CONTENT="TechnicalManual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="TechnicalManual.css">
+
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<IMG WIDTH="81" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next_inactive" SRC="nx_grp_g.png"> 
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up_g.png"> 
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev_g.png">   
+<BR>
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+<H1 ALIGN="CENTER">RL-Glue 3.0 Technical Manual </H1>
+<DIV>
+
+<P ALIGN="CENTER"><STRONG>Brian Tanner :: brian@tannerpages.com</STRONG></P>
+</DIV>
+<BR>
+
+<H2><A NAME="SECTION00010000000000000000">
+Contents</A>
+</H2>
+<!--Table of Contents-->
+
+<UL>
+<LI><A NAME="tex2html89"
+  HREF="TechnicalManual.html#SECTION00020000000000000000">Introduction</A>
+<UL>
+<LI><A NAME="tex2html90"
+  HREF="TechnicalManual.html#SECTION00021000000000000000">Software Requirements</A>
+<LI><A NAME="tex2html91"
+  HREF="TechnicalManual.html#SECTION00022000000000000000">Getting the Project</A>
+<LI><A NAME="tex2html92"
+  HREF="TechnicalManual.html#SECTION00023000000000000000">Binary Distributions</A>
+<LI><A NAME="tex2html93"
+  HREF="TechnicalManual.html#SECTION00024000000000000000">Installing From Source</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html94"
+  HREF="TechnicalManual.html#SECTION00030000000000000000">Sample Project</A>
+<UL>
+<LI><A NAME="tex2html95"
+  HREF="TechnicalManual.html#SECTION00031000000000000000">Agent, Environments, and Experiments</A>
+<LI><A NAME="tex2html96"
+  HREF="TechnicalManual.html#SECTION00032000000000000000">Compiling and Running Skeleton</A>
+<LI><A NAME="tex2html97"
+  HREF="TechnicalManual.html#SECTION00033000000000000000">Custom Flags for Custom Installs</A>
+<LI><A NAME="tex2html98"
+  HREF="TechnicalManual.html#SECTION00034000000000000000">Skeleton Agent</A>
+<LI><A NAME="tex2html99"
+  HREF="TechnicalManual.html#SECTION00035000000000000000">Skeleton Environment</A>
+<LI><A NAME="tex2html100"
+  HREF="TechnicalManual.html#SECTION00036000000000000000">Skeleton Experiment</A>
+<LI><A NAME="tex2html101"
+  HREF="TechnicalManual.html#SECTION00037000000000000000">Gotchas!</A>
+<LI><A NAME="tex2html102"
+  HREF="TechnicalManual.html#SECTION00038000000000000000">Going Further - Mines Sarsa Example Project</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html103"
+  HREF="TechnicalManual.html#SECTION00040000000000000000">Advanced Features</A>
+<UL>
+<LI><A NAME="tex2html104"
+  HREF="TechnicalManual.html#SECTION00041000000000000000">Listening on Custom Ports</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html105"
+  HREF="TechnicalManual.html#SECTION00050000000000000000">Who creates and frees memory?</A>
+<UL>
+<LI><A NAME="tex2html106"
+  HREF="TechnicalManual.html#SECTION00051000000000000000">Copy-On-Keep</A>
+<LI><A NAME="tex2html107"
+  HREF="TechnicalManual.html#SECTION00052000000000000000">Free Your Mess</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html108"
+  HREF="TechnicalManual.html#SECTION00060000000000000000">Socket Connections and Codecs</A>
+<LI><A NAME="tex2html109"
+  HREF="TechnicalManual.html#SECTION00070000000000000000">RL-Glue C/C++ Specification Reference</A>
+<UL>
+<LI><A NAME="tex2html110"
+  HREF="TechnicalManual.html#SECTION00071000000000000000">Types</A>
+<LI><A NAME="tex2html111"
+  HREF="TechnicalManual.html#SECTION00072000000000000000">Functions</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html112"
+  HREF="TechnicalManual.html#SECTION00080000000000000000">Changes and 2.x Backward Compatibility</A>
+<UL>
+<LI><A NAME="tex2html113"
+  HREF="TechnicalManual.html#SECTION00081000000000000000">Build Changes</A>
+<LI><A NAME="tex2html114"
+  HREF="TechnicalManual.html#SECTION00082000000000000000">Header Location Changes</A>
+<LI><A NAME="tex2html115"
+  HREF="TechnicalManual.html#SECTION00083000000000000000">Typedefs</A>
+<LI><A NAME="tex2html116"
+  HREF="TechnicalManual.html#SECTION00084000000000000000">Composite Structures</A>
+<LI><A NAME="tex2html117"
+  HREF="TechnicalManual.html#SECTION00085000000000000000">Const-Correctness and the Pointer Revolution</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html118"
+  HREF="TechnicalManual.html#SECTION00090000000000000000">Frequently Asked Questions</A>
+<UL>
+<LI><A NAME="tex2html119"
+  HREF="TechnicalManual.html#SECTION00091000000000000000">Where can I get more help?</A>
+<LI><A NAME="tex2html120"
+  HREF="TechnicalManual.html#SECTION00092000000000000000">How can I tell what version of RL-Glue is installed?</A>
+<LI><A NAME="tex2html121"
+  HREF="TechnicalManual.html#SECTION00093000000000000000">Error: ``C compiler cannot create executables'' when building RL-Glue</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html122"
+  HREF="TechnicalManual.html#SECTION000100000000000000000">Credits and Acknowledgements</A>
+<UL>
+<LI><A NAME="tex2html123"
+  HREF="TechnicalManual.html#SECTION000101000000000000000">Contributing</A>
+</UL></UL>
+<!--End of Table of Contents-->
+<P>
+
+<H1><A NAME="SECTION00020000000000000000">
+Introduction</A>
+</H1>
+
+<P>
+This document describes how to use RL-Glue when each of the agent, environment, and experiment program is written in C/C++.  This scenario is also known as the <I>direct-compile</I> scenario, because all of the
+components can be compiled together into a single executable program.  This contrasts with the more flexible way to use RL-Glue, where the <TT>rl_glue</TT> executable server acts as a bridge for agents, environments, and experiment 
+programs written in any of: Python, Lisp, Matlab, Java, or C/C++.  
+
+<P>
+For general information and motivation about RL-Glue, please read the <A NAME="tex2html4"
+  HREF="http://rl-glue.googlecode.com/svn/trunk/docs/html/index.html">RL-Glue overview documentation</A>.  This technical manual is about explaining the finer details of installing RL-Glue and creating direct-compile projects, 
+so we won't rehash all of the high level RL-Glue ideas.
+
+<P>
+This software project is licensed under the Apache-2.0<A NAME="tex2html1"
+  HREF="#foot349"><SUP>1</SUP></A> license. We're not lawyers, but our intention is that this code 
+should be used however it is useful.  We'd appreciate to hear what you're using it for, and to get credit if appropriate.
+
+<P>
+This project has a home here:
+<BR><TT><A NAME="tex2html3"
+  HREF="http://glue.rl-community.org">http://glue.rl-community.org</A></TT>
+<P>
+
+<H2><A NAME="SECTION00021000000000000000">
+Software Requirements</A>
+</H2>
+This project requires nothing more exotic than a C compiler, Make, etc.  This project uses a configure script that was created by GNU 
+Autotools<A NAME="tex2html5"
+  HREF="#foot350"><SUP>2</SUP></A>, so it should compile and run without problems 
+on most *nix platforms (Unix, Linux, Mac OS X, Windows using CYGWIN<A NAME="tex2html7"
+  HREF="#foot351"><SUP>3</SUP></A>). 
+
+<P>
+
+<H2><A NAME="SECTION00022000000000000000">
+Getting the Project</A>
+</H2>
+You can get the codec a number of ways, including from source as a .tar.gz file, or as a binary distribution.
+
+<P>
+All of the official downloads of the RL-Glue Core can be found here:
+<BR>
+<TT><A NAME="tex2html9"
+  HREF="http://code.google.com/p/rl-glue-ext/wiki/RLGlueCore">http://code.google.com/p/rl-glue-ext/wiki/RLGlueCore</A></TT>
+<P>
+You may also check the code out directly from the subversion:
+<TT>svn checkout http://rl-glue.googlecode.com/svn/trunk rl-glue</TT>
+
+<P>
+
+<H2><A NAME="SECTION00023000000000000000">
+Binary Distributions</A>
+</H2>
+
+<H3><A NAME="SECTION00023100000000000000">
+Windows Binary rl_glue.exe Package</A>
+</H3>
+This package is intended for Microsoft Windows users who plan to write agents, environments, and experiments in languages other than C/C++.
+
+<P>
+This distribution is simply the <TT>rl_glue.exe</TT> executable socket server, precompiled for Windows, and the GlueOverview and TechnicalManual PDF files.  Using this distribution does not allow you to install the C/C++ codec, because that codec requires access to certain shared libraries not included in this binary package.
+
+<P>
+If you use this distribution, you can start <TT>rl_glue.exe</TT> a number of ways.  You can just double-click it, for example.  This will probably be very tedious in the long run. 
+
+<P>
+You should probably put <TT>rl_glue.exe</TT> into your <TT>$PATH</TT>, so that you can easily find it either from the Windows <TT>COMMAND</TT> program, or from within other programs like Matlab.  By default, the <TT>Windows/System</TT> folder is in the path, so if you put <TT>rl_glue.exe</TT> in that folder, you will be able to start it easily.  If you put it elsewhere you should consider updating your Windows path to include it.   There are instructions on the Internet that can help you with this, for example <A NAME="tex2html10"
+  HREF="http://www.computerhope.com/issues/ch000549.htm">these</A>.
+
+<P>
+Once <TT>rl_glue.exe</TT> is in your <TT>$PATH</TT>, you can start it from the windows <TT>COMMAND</TT> program by typing:
+<PRE>
+	C:\DOCUME~1\ADMINI~1&gt;rl_glue.exe
+</PRE>
+
+<P>
+
+<H3><A NAME="SECTION00023200000000000000">
+Intel Mac OX 10.3+ Package</A>
+</H3>
+This package is intended for all Intel Mac 10.3+ users.
+
+<P>
+This distribution is an installer package bundled into a Mac Disk Image (.dmg).  This is a graphical installer application and should be fairly self explanatory. This distribution comes with an uninstall script that can be used to remove this codec from your system.
+
+<P>
+
+<H2><A NAME="SECTION00024000000000000000">
+Installing From Source</A>
+</H2>
+The package was made with autotools, which means that you shouldn't have to do much work to get it installed.  
+
+<P>
+
+<H3><A NAME="SECTION00024100000000000000">
+Simple Install</A>
+</H3>
+If you are working on your own machine, it is usually easiest to install the headers, libraries, and <TT>rl_glue</TT> binary into <TT>/usr/local</TT>, which is the default 
+installation location but requires <I>sudo</I> or <I>root</I> access.
+
+<P>
+The steps are:
+<PRE>
+	&gt;$ ./configure
+	&gt;$ make
+	&gt;$ sudo make install
+</PRE>
+
+<P>
+Provided everything goes well, the headers have now been installed to <TT>/usr/local/include</TT> the libs to <TT>/usr/local/lib</TT>, and <TT>rl_glue</TT> to <TT>/usr/local/bin</TT>.
+
+<P>
+<B>NOTE:</B> On many Linux systems, <TT>/usr/local</TT> is not actually on the library and header search paths by default, but <TT>/usr</TT> surely is. In this case, you may want to follow the instructions in Section <A HREF="#custom-install-location">1.4.2</A> system with <TT>-prefix=/usr</TT>.
+
+<P>
+
+<H3><A NAME="SECTION00024200000000000000"></A>
+<A NAME="custom-install-location"></A>
+<BR>
+Install To Custom Location (maybe without <I>root</I> access)
+</H3>
+You might want to install RL-Glue to a location other than the default of <TT>/usr/local</TT>.
+
+<P>
+If you don't have <I>sudo</I> or <I>root</I> access on the target machine, you can install RL-Glue in your home directory (or other directory you have access to).
+If you install to a custom location, you will need to set your <TT>CFLAGS</TT> and <TT>LDFLAGS</TT> variables appropriately when compiling your projects. See Section <A HREF="#sec:custom-flags">2.3</A> for more information.
+
+<P>
+For example, maybe we want to install RL-Glue to <TT>/Users/joe/glue</TT>.  The commands are:
+<PRE>
+	&gt;$ ./configure --prefix=/Users/joe/glue
+	&gt;$ make
+	&gt;$ make install
+</PRE>
+
+<P>
+Provided everything goes well, the headers, libraries, binaries have been respectively installed to
+<BR>
+<TT>/Users/joe/glue/include</TT>
+<BR>
+<TT>/Users/joe/glue/lib</TT>
+<BR>
+<TT>/Users/joe/glue/bin</TT>
+
+<P>
+
+<H3><A NAME="SECTION00024300000000000000">
+Uninstall</A>
+</H3>
+If you decide that you don't want  RL-Glue on your machine anymore, you can easily uninstall it.  The procedures varies a tiny bit depending on if you installed it to the default location, or to a custom location.
+
+<P>
+
+<H3><A NAME="SECTION00024400000000000000">
+RL-Glue Installed To Default Location</A>
+</H3>
+<PRE>
+	&gt;$ ./configure
+	&gt;$ sudo make uninstall
+</PRE>
+
+<P>
+This will remove all of the headers, libraries, and binaries from <TT>/usr/local</TT>.
+
+<P>
+
+<H3><A NAME="SECTION00024500000000000000">
+RL-Glue Installed To Custom Location</A>
+</H3>
+You'll need to make sure that either you haven't reconfigured the directory you downloaded from, or, if you removed/changed that already, you have to run configure again the exact same way as when you installed it.  For example:
+<PRE>
+	&gt;$ ./configure --prefix=/Users/joe/glue
+	&gt;$ make uninstall
+</PRE>
+
+<P>
+That's it!  This will remove all of the headers, libraries, and binaries from <TT>/Users/joe/glue</TT>.
+
+<P>
+You could also just delete the <TT>glue</TT> directory, but that may also remove related files and libraries in addition to RL-Glue (codec support files and such that you may have installed).
+
+<P>
+
+<H1><A NAME="SECTION00030000000000000000">
+Sample Project</A>
+</H1>
+We have included two example projects with this codec, located in the <TT>examples</TT> directory.  The  <TT>skeleton</TT> and <TT>mines-sarsa-sample</TT> projects each contain an agent, environment, and experiment written in C.
+
+<P>
+The <TT>skeleton</TT> contains all of the bare-bones plumbing that is required to create an agent/environment/experiment with this codec and might be a good starting point for creating your own components.
+
+<P>
+The <TT>mines-sarsa-sample</TT> contains a fully functional tabular Sarsa learning algorithm, a discrete-observation grid world problem, and an experiment program that can run these together and gather results.  More details below in Section <A HREF="#mines-sarsa-sample">2.8</A>.
+
+<P>
+In the following sections, we will describe the skeleton project.  Running and using the <TT>mines-sarsa-sample</TT> is analogous.
+
+<P>
+
+<H2><A NAME="SECTION00031000000000000000">
+Agent, Environments, and Experiments</A>
+</H2>
+We have provided a skeleton agent, environment, and experiment program that can be compiled together and run as an experiment.
+This is a good starting point for projects that you may write in the future.  For now, the skeleton is extremely simple.  Before the official RL-Glue 3.0 release, we will add a complete sample learning agent for this and each codec.
+
+<P>
+We'll start by explaining how to compile and run the experiment, then we'll talk in more detail about each part.
+
+<P>
+
+<H2><A NAME="SECTION00032000000000000000">
+Compiling and Running Skeleton</A>
+</H2>
+If RL-Glue has been installed in the default location, <TT>/usr/local</TT>, then you can compile and run the experiment like:
+<PRE>
+	&gt;$ cd examples/skeleton/
+	&gt;$ make
+	&gt;$ ./SkeletonExperiment
+</PRE>
+
+<P>
+We will spend a little bit talking about how to compile the project, because not everyone is comfortable with using a <TT>Makefile</TT>.  To compile
+the project from the command line, you could do:
+<PRE>
+	&gt;$ cc *.c -lrlglue -lrlutils -o SkeletonExperiment
+</PRE>
+
+<P>
+It might be useful to break this down a little bit:
+<DL>
+<DT><STRONG>cc</STRONG></DT>
+<DD>The C compiler.  You could also use <TT>gcc</TT> or <TT>g++</TT>, etc.
+</DD>
+<DT><STRONG>*.c</STRONG></DT>
+<DD>Compile <TT>SkeletonExperiment.c</TT> <TT>SkeletonAgent.c</TT> <TT>SkeletonEnvironment.c</TT> sources files.
+</DD>
+<DT><STRONG>-lrlglue</STRONG></DT>
+<DD>Link to the RLGlue library.  This is where the <I>glue</I> that connects the three components is defined.
+</DD>
+<DT><STRONG>-lrlutils</STRONG></DT>
+<DD>Link to the RLUtils library, which comes with RL-Glue.  This library contains convenience functions for allocating and cleaning up the structure types (Section <A HREF="#sec:util-functions">6.2.4</A>).  If you 
+don't use these convenience functions, you don't need this library.
+</DD>
+</DL>
+
+<P>
+At this point, we've compiled the project, now we just have to run the experiment:
+<PRE>
+	&gt;$ ./SkeletonExperiment
+</PRE>
+
+<P>
+You should see output like the following if it worked:
+<PRE>
+	&gt;$ ./SkeletonExperiment
+	Experiment starting up!
+	RL_init called, the environment sent task spec: VERSION RL-Glue-3.0 
+		PROBLEMTYPE episodic DISCOUNTFACTOR 1.0 OBSERVATIONS INTS (0 20) 
+		ACTIONS INTS (0 1)  REWARDS (-1.0 1.0)  
+		EXTRA skeleton_environment(C/C++) by Brian Tanner.
+
+	----------Sending some sample messages----------
+	Agent responded to "what is your name?" with: my name is skeleton_agent!
+	Agent responded to "If at first you don't succeed; call it version 1.0"
+	 with: I don't know how to respond to your message
+
+	Environment responded to "what is your name?" with: my name is skeleton_environment!
+	Environment responded to "If at first you don't succeed;
+	 call it version 1.0" with: I don't know how to respond to your message
+
+
+	----------Running a few episodes----------
+	Episode 0	 100 steps 	0.000000 total reward	 0 natural end 
+	Episode 1	 90 steps 	-1.000000 total reward	 1 natural end 
+	Episode 2	 56 steps 	1.000000 total reward	 1 natural end 
+	Episode 3	 100 steps 	0.000000 total reward	 0 natural end 
+	Episode 4	 96 steps 	-1.000000 total reward	 1 natural end 
+	Episode 5	 1 steps 	0.000000 total reward	 0 natural end 
+	Episode 6	 106 steps 	1.000000 total reward	 1 natural end 
+
+
+	----------Stepping through an episode----------
+	First observation and action were: 10 1
+
+
+	----------Summary----------
+	It ran for 204 steps, total reward was: -1.000000
+</PRE>
+
+<P>
+That's all there is to it! You just ran a direct-compile RL-Glue experiment! Congratulations!
+
+<P>
+
+<H2><A NAME="SECTION00033000000000000000"></A>
+<A NAME="sec:custom-flags"></A>
+<BR>
+Custom Flags for Custom Installs
+</H2>
+If RL-Glue has been installed in a custom location (for example: <TT>/Users/joe/glue</TT>), then you will
+need to set the header search path in <TT>CFLAGS</TT> and the library search path in <TT>LDFLAGS</TT>.  You can either do this each time you call make, 
+or you can export the values as environment variables.
+
+<P>
+To do it on the command line:
+<PRE>
+&gt;$ CFLAGS=-I/Users/joe/glue/include LDFLAGS=-L/Users/joe/glue/lib make
+</PRE>
+
+<P>
+That might turn out to be quite a hassle to type those flags all the time while you are developing.  In that case, you can either update the <TT>Makefile</TT> to include these flags, 
+or set an environment variable.  If you are using the bash shell you can <TT>export</TT> the environment variables:
+<PRE>
+&gt;$ export CFLAGS=-I/Users/joe/glue/include
+&gt;$ export LDFLAGS=-L/Users/joe/glue/lib
+&gt;$ make
+</PRE>
+
+<P>
+In some cases, you may be able to compile and link your programs without incident, but you receive shared library loading errors when you try to execute them, as mentioned in Gotchas! (Section <A HREF="#sec:gotchas-shared-libs">2.7.2</A>).
+
+<P>
+In these cases, you may also have to set <TT>LD_LIBRARY_PATH</TT> (Linux) or <TT>DYLD_LIBRARY_PATH</TT> (OS X) environment variables, like:
+<PRE>
+	&gt;$ export LD_LIBRARY_PATH=/Users/joe/glue/lib
+</PRE>
+
+<P>
+In some cases (64-bit linux looks in <TT>/usr/local/lib64</TT>?) you may have to use this approach even when RL-Glue is installed in the default location:
+<PRE>
+	&gt;$ export LD_LIBRARY_PATH=/usr/local/lib
+</PRE>
+
+<P>
+When you open a new terminal window, all of these environment variables will be lost unless you put the appropriate <TT>export</TT> lines in your shell startup script.
+
+<P>
+
+<H2><A NAME="SECTION00034000000000000000"></A>
+<A NAME="sec:agent"></A>
+<BR>
+Skeleton Agent
+</H2>
+Th Skeleton agent implements all the required functions and provides a good example of how to create a simple agent.
+
+<P>
+The pertinent files are:
+<PRE>
+	examples/skeleton/SkeletonAgent.c
+</PRE>
+
+<P>
+This agent does not learn anything and randomly chooses integer action 0 or 1.
+
+<P>
+The Skeleton agent is very simple and well documented, so we won't spend any more time talking about it in these instructions.
+Please open it up and take a look.
+
+<P>
+
+<H2><A NAME="SECTION00035000000000000000"></A>
+<A NAME="sec:env"></A>
+<BR>
+Skeleton Environment
+</H2>
+The Skeleton environment provides a good example of how to create a simple environment. 
+
+<P>
+The pertinent files are:
+<PRE>
+	examples/skeleton_environment/SkeletonEnvironment.c
+</PRE>
+
+<P>
+This environment is episodic, with 21 states, labeled <!-- MATH
+ $\{0, 1,\ldots,19,20\}$
+ -->
+<IMG
+ WIDTH="128" HEIGHT="35" ALIGN="MIDDLE" BORDER="0"
+ SRC="img1.png"
+ ALT="$\{0, 1,\ldots,19,20\}$">. States {0, 20} are terminal and return rewards of {-1, +1} respectively.  The other states return reward of 0.
+There are two actions, {0, 1}.  Action 0 decrements the state number, and action 1 increments it. The environment starts in state 10.
+
+<P>
+The Skeleton environment is very simple and well documented, so we won't spend any more time talking about it in these instructions.
+Please open it up and take a look.
+
+<P>
+
+<H2><A NAME="SECTION00036000000000000000">
+Skeleton Experiment</A>
+</H2>
+The Skeleton experiment implements all the required functions and provides a good example of how to create a simple experiment.  This section will follow the same 
+pattern as the agent version (Section <A HREF="#sec:agent">2.4</A>).  This section will be less detailed because many ideas are similar or identical.
+
+<P>
+The pertinent files are:
+<PRE>
+	examples/skeleton_experiment/SkeletonExperiment.c
+</PRE>
+
+<P>
+This experiment runs <TT>RL_Episode</TT> a few times, sends some messages to the agent and environment, and then steps through one episode using <TT>RL_step</TT>.
+
+<P>
+The Skeleton experiment is very simple and well documented, so we won't spend any more time talking about it in these instructions.
+Please open it up and take a look.
+
+<P>
+
+<H2><A NAME="SECTION00037000000000000000">
+Gotchas!</A>
+</H2>
+
+<H3><A NAME="SECTION00037100000000000000">
+Crashes and Bus Errors in Experiment Program</A>
+</H3>
+If you are running an experiment using <TT>RL_step</TT>, beware that the last step (when <TT>terminal==1</TT>), the action will be empty.  If you try to access the values of the actions in this 
+case, you may crash your program.
+
+<P>
+
+<H3><A NAME="SECTION00037200000000000000"></A>
+<A NAME="sec:gotchas-shared-libs"></A>
+<BR>
+Shared Library Loading Errors
+</H3>
+On some machines we've used, RL-Glue installs without incident, but when the experiment is run, the system gives an error message similar to:
+<PRE>
+	&gt;$ ./SkeletonExperiment: error while loading shared libraries: librlglue-3:0:0.so.1:
+	cannot open shared object file: No such file or directory
+</PRE>
+
+<P>
+If this happens, the operating system might have an alternate search path, and might not be looking in <TT>/usr/local/lib</TT> for libraries. 
+You can troubleshoot this problem by doing:
+<PRE>
+	&gt;$ LD_DEBUG=libs ./SkeletonExperiment
+</PRE>
+If you see that <TT>/usr/local/lib</TT> is not in the search path, you may want to add it to your library search path using <TT>LDFLAGS</TT> or <TT>LD_LIBRARY_PATH</TT>.  See Section <A HREF="#sec:custom-flags">2.3</A> for more information.  
+
+<P>
+
+<H2><A NAME="SECTION00038000000000000000"></A>
+<A NAME="mines-sarsa-sample"></A>
+<BR>
+Going Further - Mines Sarsa Example Project
+</H2>
+The <TT>skeleton</TT> sample project is extremely limited and only shows the mechanics of how RL-Glue components are structured.  The <TT>mines-sarsa</TT> sample project is much richer.
+
+<P>
+
+<H3><A NAME="SECTION00038100000000000000"></A>
+<A NAME="mines-sample"></A>
+<BR>
+Sample-Mines-Environment
+</H3>
+The 
+<A NAME="tex2html13"
+  HREF="http://code.google.com/p/rl-glue/source/browse/trunk/examples/mines-sarsa-sample/SampleMinesEnvironment.c">mines
+ environment</A>
+is internally a two-dimensional, discrete grid world where the agent receives a penalty per step until reaching a goal state, hopefully without stepping on any exploding land-mines along the way.  The (x,y) state is flattened into a discrete, scalar observation for the agent.  This environment can receive special messages from the experiment program to print the current state to the screen, and also to toggle between random starting states and a fixed starting-state specified by the experiment.
+
+<P>
+The task specification string<A NAME="tex2html11"
+  HREF="#foot353"><SUP>4</SUP></A> is manually created because there is not yet a task spec builder for C/C++. 
+
+<P>
+
+<H3><A NAME="SECTION00038200000000000000"></A>
+<A NAME="sarsa-sample"></A>
+<BR>
+Samples-Sarsa-Agent
+</H3>
+The 
+<A NAME="tex2html14"
+  HREF="http://code.google.com/p/rl-glue/source/browse/trunk/examples/mines-sarsa-sample/SampleSarsaAgent.c">SARSA agent</A>
+is a tabular learning agent that uses <!-- MATH
+ $\epsilon-greedy$
+ -->
+<IMG
+ WIDTH="84" HEIGHT="33" ALIGN="MIDDLE" BORDER="0"
+ SRC="img2.png"
+ ALT="$\epsilon-greedy$"> exploration as described in <A NAME="tex2html15"
+  HREF="http://www.cs.ualberta.ca/~sutton/book/ebook/node64.html">Reinforcement Learning: An Introduction</A>
+by Sutton and Barto.
+
+<P>
+The SARSA agent parses the task specification string using the C/C++ task spec parser.  This agent can receive special messages from the experiment program to pause/unpause learning, pause/unpause exploring, save the current value function to a file, and load the the value function from a file.
+
+<P>
+
+<H3><A NAME="SECTION00038300000000000000">
+Sample-Experiment</A>
+</H3>
+The sample experiment program runs the show.  First, it alternates running the agent in the environment for a number of episodes, and telling the agent to pause learning so that the current performance can be evaluated.  These results are saved to a comma-separated-value file.
+
+<P>
+The sample experiment then tells the agent to save the value function to a file, and then resets the experiment (and agent) to initial conditions.  After verifying that the agent's initial policy is bad, the experiment tells the agent to load the value function from the file.  The agent is evaluated again using this previously-learned value function, and performance is dramatically better.
+
+<P>
+Finally, the experiment sends a message to specify that the environment should use a fixed (instead of random) starting state, and runs the agent from that fixed start state for a while.
+
+<P>
+
+<H1><A NAME="SECTION00040000000000000000">
+Advanced Features</A>
+</H1>
+
+<H2><A NAME="SECTION00041000000000000000">
+Listening on Custom Ports</A>
+</H2>
+When connecting to RL_Glue from languages other than C/C++, the agents/environments/experiments that are connecting will be using a <TT>codec</TT> written for a different language.  These codecs connect to the <TT>rl_glue</TT> executable server over sockets (either locally on your machine, or over the Internet).
+
+<P>
+Sometimes you will want run the <TT>rl_glue</TT> server on a port other than the default
+(4096) either because of firewall issues, or because you want to run multiple instances on the same machine.
+
+<P>
+In these cases, you can tell the <TT>rl_glue</TT> executable to listen on a custom port using the environment variable <TT>RLGLUE_PORT</TT>.
+
+<P>
+For example, try the following code:
+<PRE>
+	&gt; $ RLGLUE_PORT=1025 rl_glue
+</PRE>
+
+<P>
+That command could give output like:
+<PRE>
+	RL-Glue Version 3.0-RC1a, Build 882
+	RL-Glue is listening for connections on port=1025
+</PRE>
+
+<P>
+If you don't like typing it every time, you can export it so that the value will be set for future
+calls to <TT>rl_glue</TT> in the same session:
+<PRE>
+	&gt; $ export RLGLUE_PORT=1025
+	&gt; $ rl_glue
+</PRE>
+
+<P>
+Remember, on most *nix systems, you need <TT>superuser</TT> privileges to listen on ports lower than 1024, so you probably want to pick one higher than that.
+
+<P>
+
+<H1><A NAME="SECTION00050000000000000000">
+Who creates and frees memory?</A>
+</H1>
+Memory management can be confusing in C/C++.  It might seem especially mysterious when using RL-Glue, because sometimes the structures are passed directly 
+from function to function (in direct-compile RL-Glue), but other times they are written and read through a network socket (with the C/C++ network codec).
+
+<P>
+
+<H2><A NAME="SECTION00051000000000000000">
+Copy-On-Keep</A>
+</H2>
+The rule of thumb to follow in RL-Glue is what we call <I>copy-on-keep</I>.  Copy-on-keep means that when you are passed a dynamically allocated structure, you should
+only consider it valid within the function that it was given to you.  If you need a persistent copy of the data outside of that scope, you should make a copy: copy it if you
+need to keep it.
+
+<P>
+
+<H3><A NAME="SECTION00051100000000000000">
+Task Spec Example</A>
+</H3>
+<PRE>
+/********************   UNSAFE   *******************/
+char* task_spec_copy=0;
+	
+void agent_init(const char* task_spec){
+        /*
+            Not making a copy, just keeping a pointer to the data
+            Compiler will even complain 
+        */
+    task_spec_copy=task_spec;
+}
+
+const action_t* agent_start(const observation_t* this_observation) {
+        /*
+            Behavior undefined.  Who knows if the string the task_spec
+            was originally pointing to still exists?
+        */
+    printf("Task spec we saved is: %s\n",task_spec_copy);
+    ...
+</PRE>
+
+<P>
+<PRE>
+/********************   SAFE   *******************/
+char* task_spec_copy=0;
+	
+void agent_init(const char* task_spec){
+        /*
+            Allocating space (need length+1 for the terminator character)
+        */
+    task_spec_copy=(char *)calloc(strlen(task_spec)+1, sizeof(char));
+    strcpy(task_spec_copy,task_spec);
+}
+
+const action_t* agent_start(const observation_t* this_observation) {
+        /*
+            This is fine, because even if 
+            the task_spec was freed, we have a copy.
+        */
+    printf("Task spec we saved is: %s\n",task_spec_copy);
+    ...
+</PRE>
+
+<P>
+
+<H3><A NAME="SECTION00051200000000000000">
+Observation Example (using helper library)</A>
+</H3>
+
+<P>
+<PRE>
+/********************   UNSAFE   *******************/
+observation_t* last_observation=0;
+const action_t* agent_start(const observation_t *this_observation) {
+        /*
+            Unsafe, points last_observation to this_observation's arrays!
+            Compiler will even complain (that's new)		
+        */
+    last_observation=this_observation;
+...
+</PRE>
+
+<P>
+<PRE>
+/********************   SAFE   *******************/
+observation_t* last_observation=0;
+const action_t* agent_start(const observation_t *this_observation) {
+        /*
+           This helper function allocates a new struct and 
+           copies from this_observation!
+        */
+    last_observation=duplicateRLStructToPointer(this_observation);
+...
+</PRE>
+
+<P>
+Alternatively, if we already had a pointer to a <TT>observation_t</TT>.
+<PRE>
+/**************   Alternate 1 SAFE   *************/
+    /*Somewhere else in the code*/
+    observation_t* last_observation=allocateRLStructPointer(0,0,0);
+    ...
+
+const action_t* agent_start(const observation_t *this_observation) {
+    /*
+       This helper function allocates memory inside last_observation
+       if necessary and copies this_observation into it!
+    */
+
+    replaceRLStruct(this_observation,last_observation);
+...
+</PRE>
+
+<P>
+Or, if you don't like working with pointers:
+<PRE>
+/**************   Alternate 2 SAFE   *************/
+observation_t last_observation={0}; /* Not a pointer */
+const action_t* agent_start(const observation_t *this_observation) {
+        /*
+           This helper function allocates memory inside last_observation
+           if necessary and copies this_observation into it!
+        */
+    
+    replaceRLStruct(this_observation,&amp;last_observation);
+...
+</PRE>
+
+<P>
+Remember that any memory that you allocate within an agent, environment, or experiment the old fashioned way <TT>malloc/new</TT> or using the convenience functions in <TT>&lt;rlglue/utils/C/RLStruct_util.h&gt;</TT> should be released
+by you in the appropriate <TT>cleanup</TT> function.
+
+<H2><A NAME="SECTION00052000000000000000">
+Free Your Mess</A>
+</H2>
+When using RL-Glue, you are responsible for cleaning up any memory that you allocate. The good news is that that you can trust that between function calls, any memory you've returned to a caller has either been
+copied or is not necessary (it is safe to free it).  Remember that in C/C++ it's not safe to return pointers to stack-based memory.
+
+<P>
+The Skeleton examples do the appropriate thing in this respect: the <TT>intArrays</TT> that need to be dynamically allocated are allocated in the <TT>_init</TT> methods, and then the memory is released in the <TT>_cleanup</TT> methods.
+
+<P>
+
+<H3><A NAME="SECTION00052100000000000000">
+Messaging Examples</A>
+</H3>
+Copying, comparing, and allocating Strings in C can be tricky, so here are a couple of examples:
+
+<P>
+<PRE>
+/********************   UNSAFE   *******************/
+const char* agent_message(const char* inMessage) {
+    char theBuffer[1024];
+    sprintf(theBuffer,"this is an example response message\n");
+        /*
+            This returns the address of a local variable
+            bad idea and compiler will complain
+        */
+    return theBuffer;
+}
+</PRE>
+
+<P>
+<PRE>
+/****************   UNSAFE (MEMORY LEAK)   ***************/
+const char* agent_message(const char* inMessage) {
+    char theBuffer[1024];
+    char* returnString=0;
+    sprintf(theBuffer,"this is an example response message\n");
+    returnString=(char *)calloc(strlen(theBuffer)+1,sizeof(char));
+    strcpy(returnString,theBuffer);
+        /*
+            Memory leak... every time this function is called
+            a new returnString is allocated, but nobody will
+            ever clean them up!
+        */
+    return returnString;
+}
+</PRE>
+
+<P>
+<PRE>
+/********************   SAFE   *******************/
+char* agentReturnString=0; /*Global Variable */	
+const char* agent_message(const char* inMessage) {
+    char theBuffer[1024];
+    sprintf(theBuffer,"this is an example response message\n");
+
+        /*
+            This code will free the memory on subsequent calls
+        */
+    if(agentReturnString!=0){
+        free(agentReturnString);
+        agentReturnString=0;
+    }
+    agentReturnString=(char *)calloc(strlen(theBuffer)+1,sizeof(char));
+    strcpy(agentReturnString,theBuffer);
+    return agentReturnString;
+}
+</PRE>
+
+<P>
+
+<H1><A NAME="SECTION00060000000000000000">
+Socket Connections and Codecs</A>
+</H1>
+When using socket mode: the agent, environment, and experiment programs communicate with the <TT>rl_glue</TT> server over sockets.  This can be either within a single machine, or over the Internet.
+
+<P>
+RL-Glue uses TCP/IP connections between all of the components.  RL-Glue operates in lock-step, not asynchronously.  There is no time-out mechanism, RL-Glue will wait for an agent or environment to return from a remote function call indefinitely unless the connection is terminated.  This is by design.   By default, RL-Glue listens (and codecs connect to) port 4096 on <TT>localhost</TT>.
+
+<P>
+In the future, an advanced technical guide will be available that describes how to write a codec to allow the language of your choice to connect to RL-Glue over sockets.  This will be an integral part of the growth and standardization of RL-Glue to a growing number of platforms and languages.  Until then, please contact us directly on the RL-Glue mailing list for further information:
+<BR><TT><A NAME="tex2html16"
+  HREF="http://groups.google.com/group/rl-glue">http://groups.google.com/group/rl-glue</A></TT>
+<P>
+It's not impossible!  At least one enterprising individual, Gabor Balazs, has written a codec (LISP) without any direct help from the core RL-Glue team.  
+
+<P>
+
+<H1><A NAME="SECTION00070000000000000000">
+RL-Glue C/C++ Specification Reference</A>
+</H1>
+This section will explain how the RL-Glue types and functions are defined for C/C++.  This is important both for direct-compile experiments, and for components that
+ use the C/C++ network codec.
+
+<P>
+
+<H2><A NAME="SECTION00071000000000000000">
+Types</A>
+</H2>
+The types used here will be the same for the C/C++ network codec.
+
+<P>
+
+<H3><A NAME="SECTION00071100000000000000">
+Simple Types</A>
+</H3>
+The simple types are:
+
+<P>
+<PRE>
+    Reward          : double
+    Terminal Flag   : int
+    Message         : char*
+    Task_Spec       : char*
+</PRE>
+
+<P>
+
+<H3><A NAME="SECTION00071200000000000000"></A>
+<A NAME="sec:structure-types"></A>
+<BR>
+Structure Types
+</H3>
+All of the major structure types (observations, actions) are typedef'd to <TT>rl_abstract_type_t </TT>.
+
+<P>
+<PRE>
+typedef struct
+{
+    unsigned int numInts;
+    unsigned int numDoubles;
+    unsigned int numChars;
+    int* intArray;
+    double* doubleArray;
+    char* charArray;
+} rl_abstract_type_t;
+</PRE>
+
+<P>
+The specific names and definitions of the structure types are:
+<PRE>
+    typedef rl_abstract_type_t observation_t;
+    typedef rl_abstract_type_t action_t;
+</PRE>
+
+<P>
+The composite structure types are:
+<PRE>
+	typedef struct{
+	    const observation_t *observation;
+	    const action_t *aaction;
+	} observation_action_t;
+
+	typedef struct{
+	    double reward;
+	    const observation_t *observation;
+	    int terminal;
+	} reward_observation_terminal_t;
+
+	typedef struct {
+	    double reward;
+	    const observation_t *observation;
+	    const action_t *action;
+	    int terminal;
+	} reward_observation_action_terminal_t;
+</PRE>
+
+<P>
+
+<H3><A NAME="SECTION00071300000000000000">
+Summary</A>
+</H3>
+The type names are:
+<PRE>
+    observation_t
+    action_t
+    observation_action_t
+    reward_observation_terminal_t
+    reward_observation_action_terminal_t
+</PRE>
+
+<P>
+
+<H2><A NAME="SECTION00072000000000000000">
+Functions</A>
+</H2>
+
+<H3><A NAME="SECTION00072100000000000000">
+Agent Functions</A>
+</H3>
+All agents <B>should implement</B> these functions, located in <TT>rlglue/Agent_common.h</TT>
+<PRE>
+	void agent_init(const char* task_spec);
+	const action_t* agent_start(const observation_t* observation);
+	const action_t* agent_step(double reward, const observation_t* observation);
+	void agent_end(double reward);  
+	void agent_cleanup();
+	const char* agent_message(const char* message);
+</PRE>
+
+<P>
+
+<H3><A NAME="SECTION00072200000000000000">
+Environment Functions</A>
+</H3>
+All environments <B>should implement</B> these functions, located in <TT>rlglue/Environment_common.h</TT>
+<PRE>
+	const char* env_init();
+	const observation_t* env_start();
+	const reward_observation_terminal_t* env_step(const action_t* action);
+	void env_cleanup();
+	const char* env_message(const char * message);
+</PRE>
+
+<P>
+
+<H3><A NAME="SECTION00072300000000000000">
+Experiments Functions</A>
+</H3>
+All experiments <B>can call</B> these functions, located in <TT>rlglue/RL_glue.h</TT>
+<PRE>
+	const char* RL_init();
+	const observation_action_t *RL_start();
+	const reward_observation_action_terminal_t *RL_step();
+	void RL_cleanup();
+
+	const char* RL_agent_message(const char* message);
+	const char* RL_env_message(const char* message);
+
+	double RL_return();
+	int RL_num_steps();
+	int RL_num_episodes();
+	int RL_episode(unsigned int num_steps);
+</PRE>
+
+<P>
+
+<H3><A NAME="SECTION00072400000000000000"></A>
+<A NAME="sec:util-functions"></A>
+<BR>
+RLUtils Library Functions
+</H3>
+You can get access to these functions by linking to libRLUtils (<TT>-lrlutils</TT>) and by including the appropriate header:
+
+<P>
+<PRE>
+#include &lt;rlglue/utils/C/RLStruct_util.h&gt;
+</PRE>
+
+<P>
+Prototypes with documentation can be found <A NAME="tex2html17"
+  HREF="http://code.google.com/p/rl-glue/source/browse/trunk/src/rlglue/utils/C/RLStruct_util.h">here</A>.
+
+<P>
+<PRE>
+	void replaceRLStruct(const rl_abstract_type_t *src, rl_abstract_type_t *dst);
+
+	void clearRLStruct(rl_abstract_type_t *dst);
+
+	void freeRLStructPointer(rl_abstract_type_t *dst);
+
+	void reallocateRLStruct(rl_abstract_type_t *dst, 
+                            const unsigned int numInts,
+                            const unsigned int numDoubles,
+                            const unsigned int numChars);
+
+	void allocateRLStruct(rl_abstract_type_t *dst, 
+                          const unsigned int numInts,
+                          const unsigned int numDoubles, 
+                          const unsigned int numChars);
+
+rl_abstract_type_t *allocateRLStructPointer(const unsigned int numInts,
+                                            const unsigned int numDoubles,
+                                            const unsigned int numChars);
+
+rl_abstract_type_t *duplicateRLStructToPointer(const rl_abstract_type_t *src);
+</PRE>
+
+<P>
+
+<H1><A NAME="SECTION00080000000000000000">
+Changes and 2.x Backward Compatibility</A>
+</H1>
+There were many changes from RL-Glue 2.x to RL-Glue 3.x.  Most of them are at the level of the API and project organization, and are addressed in the <A NAME="tex2html18"
+  HREF="http://rl-glue.googlecode.com/svn/trunk/docs/html/index.html">RL-Glue overview documentation</A>, not this technical manual.
+
+<P>
+
+<H2><A NAME="SECTION00081000000000000000">
+Build Changes</A>
+</H2>
+We're not manually writing Makefiles anymore!  We've moved both RL-Glue and the C/C++ Codec to a <A NAME="tex2html19"
+  HREF="http://www.gnu.org/software/autoconf/">GNU autotools system</A>.
+You can build these projects using the following standard Linux/Unix procedure now:
+<PRE>
+	&gt;$ ./configure
+	&gt;$ make
+	&gt;$ sudo make install
+</PRE>
+
+<P>
+
+<H2><A NAME="SECTION00082000000000000000">
+Header Location Changes</A>
+</H2>
+
+<H3><A NAME="SECTION00082100000000000000">
+Agents</A>
+</H3>
+<PRE>
+Old: #include &lt;RL_common.h&gt;
+New: #include &lt;rlglue/Agent_common.h&gt;
+</PRE>
+
+<P>
+
+<H3><A NAME="SECTION00082200000000000000">
+Environments</A>
+</H3>
+<PRE>
+Old: #include &lt;RL_common.h&gt;
+New: #include &lt;rlglue/Environment_common.h&gt;
+</PRE>
+
+<P>
+
+<H3><A NAME="SECTION00082300000000000000">
+Experiments</A>
+</H3>
+<PRE>
+Old: #include &lt;RL_glue.h&gt;
+New: #include &lt;rlglue/RL_glue.h&gt;
+</PRE>
+
+<P>
+
+<H3><A NAME="SECTION00082400000000000000">
+Miscellaneous</A>
+</H3>
+<PRE>
+Old: #include &lt;RL_network.h&gt;
+New: #include &lt;rlglue/network/RL_network.h&gt;
+</PRE>
+
+<P>
+
+<H2><A NAME="SECTION00083000000000000000">
+Typedefs</A>
+</H2>
+This is a big one. We revamped all of the type names for C/C++.  We made them all lower case, and added ``_t'' to them to identify them as types.  This should reduce confusion so there is no more code like:
+<BR>
+<TT>Observation observation;</TT>
+
+<P>
+Instead it'll be:
+<BR>
+<TT>observation_t observation;</TT>
+
+<P>
+We think the latter is easier to read.  We've also stopped using <TT>typdef</TT> for <TT>reward</TT>, <TT>task_spec</TT>.  A first beta of RL-Glue 3.0 and the C/C++ codec had new types <TT>message_t</TT> and <TT>terminal_t</TT>: these have been removed also.  Feedback from the community was that people preferred to see the actual types instead of these surrogates.
+
+<P>
+The first beta of RL-Glue 3.0 also had a file called <TT>legacy_types.h</TT> that would allow you to use the old type names.  This has been removed as of Release Candidate 4 (RC4) because of the major overhaul from structures to pointers (see Section <A HREF="#pointers">7.5</A>). Sorry. 
+
+<P>
+
+<H2><A NAME="SECTION00084000000000000000">
+Composite Structures</A>
+</H2>
+
+<P>
+
+<H3><A NAME="SECTION00084100000000000000">
+Member Naming</A>
+</H3>
+In RL-Glue 2.x, composite structures took the form:
+<PRE>
+typedef struct Reward_observation_t{
+   Reward r;
+   Observation o;
+   int terminal;
+} Reward_observation;
+</PRE>
+
+<P>
+Unfortunately, it is very inconsistent that the reward and observation are <TT>r</TT> and <TT>o</TT> respectively, 
+while the terminal flag is <TT>terminal</TT>.  With the second pass of RL-Glue 3.0 we are moving to a more verbose 
+naming scheme: we will fully name each member of these composite structs as <TT>reward</TT>, <TT>action</TT>, 
+<TT>observation</TT>, or <TT>terminal</TT>.
+
+<P>
+
+<H2><A NAME="SECTION00085000000000000000"></A>
+<A NAME="pointers"></A>
+<BR>
+Const-Correctness and the Pointer Revolution
+</H2>
+This is another big one.  This was not originally planned for RL-Glue 3.0, and it breaks backward compatibility with RL-Glue
+2.x in a serious way.  However, the payoff we hope to get by making the code easier to understand and debug should be 
+worth the effort in the long run.
+
+<P>
+Many of the old function prototypes in RL-Glue passed structures by value.  A typical example:
+<BR>
+<TT>Action agent_step(Reward r, Observation o);</TT>
+
+<P>
+In this example, Action and Observation are <TT>struct</TT>s, and Reward <TT>typdef</TT>'d to <TT>double</TT>.  In the 
+first revision of RL-Glue 3.0 we updated to:
+<BR>
+<TT>action_t agent_step(reward_t r, observation_t o);</TT>
+
+<P>
+Notice in this version that it might not be intuitive whether <TT>r</TT>, the reward, is a structure or a primitive type.  
+Safety is also not obvious: can the agent expect that the returned action will be changed by RL-Glue?  Should the agent 
+<TT>free</TT> the dynamic arrays in <TT>o</TT> when finished with it? 
+
+<P>
+With the second pass of updates, we've taken the next leap to:
+<BR>
+<TT>const action_t* agent_step(double reward, const observation_t* observation);</TT>
+
+<P>
+We feel it is more clear with this prototype that the agent should not try to change the observation, and that 
+RL-Glue will not change the action.  You can easily defeat these safety checks by casting away the <TT>const</TT>, 
+but at least the compiler will yell at you if you accidentally try to break the rules.
+
+<P>
+We have made these sorts of changes to all functions that accept or return any derivative of 
+<TT>rl_abstract_type_t</TT>.
+
+<P>
+
+<H1><A NAME="SECTION00090000000000000000">
+Frequently Asked Questions</A>
+</H1>
+
+<H2><A NAME="SECTION00091000000000000000">
+Where can I get more help?</A>
+</H2>
+
+<H3><A NAME="SECTION00091100000000000000">
+Online FAQ</A>
+</H3>
+We suggest checking out the online RL-Glue C/C++ Codec FAQ:
+<BR>
+<TT><A NAME="tex2html20"
+  HREF="http://glue.rl-community.org/Home/rl-glue#TOC-Frequently-Asked-Questions">http://glue.rl-community.org/Home/rl-glue#TOC-Frequently-Asked-Questions</A></TT>
+<P>
+The online FAQ may be more current than this document, which may have been distributed some time ago.
+
+<P>
+
+<H3><A NAME="SECTION00091200000000000000">
+Google Group / Mailing List</A>
+</H3>
+First, you should join the RL-Glue Google Group Mailing List:
+<BR>
+<TT><A NAME="tex2html21"
+  HREF="http://groups.google.com/group/rl-glue">http://groups.google.com/group/rl-glue</A></TT>
+<P>
+We're happy to answer any questions about RL-Glue.  Of course, try to search through previous messages first in case your question has been answered before.
+
+<P>
+
+<H2><A NAME="SECTION00092000000000000000">
+How can I tell what version of RL-Glue is installed?</A>
+</H2>
+You can find out the release number, and the specific build number by 
+calling RL-Glue with invalid (any) parameters.  For example:
+<PRE>
+&gt; $ rl_glue --help
+    RL-Glue Version 3.0-RC1a, Build 882
+
+        rl_glue version	=	3.0-RC1a
+        build number	=	882
+
+    Usage: $:&gt;rl_glue
+
+    By default rl_glue listens on port 4096.
+    To choose a different port, set environment variable RLGLUE_PORT.
+</PRE>
+
+<P>
+This tells you that the name of the release you have installed is <TT>3.0-RC1a</TT>, and the 
+specific build from subversion is <TT>r882</TT>.
+
+<P>
+
+<H2><A NAME="SECTION00093000000000000000">
+Error: ``C compiler cannot create executables'' when building RL-Glue</A>
+</H2>
+
+<P>
+We have seen this on a fresh Linux Ubuntu machine.  Try installing g++:
+<PRE>
+&gt; $ sudo apt-get install g++
+</PRE>
+
+<P>
+
+<H1><A NAME="SECTION000100000000000000000">
+Credits and Acknowledgements</A>
+</H1>
+Andrew Butcher originally wrote the RL-Glue library and network library.  Thanks Andrew.
+
+<P>
+Brian Tanner has since grabbed the torch and has continued to develop RL-Glue and the codecs.
+
+<P>
+Special thanks to Scott Livingston for creating the new C/C++ task spec parser.
+
+<P>
+
+<H2><A NAME="SECTION000101000000000000000">
+Contributing</A>
+</H2>
+If you would like to become a member of this project and contribute updates/changes to the code, please send a message to rl-glue@googlegroups.com.
+
+<P>
+
+<H1><A NAME="SECTION000110000000000000000">
+Document Information</A>
+</H1>
+<PRE>
+Revision Number: $Rev: 980 $
+Last Updated By: $Author: brian@tannerpages.com $
+Last Updated   : $Date: 2009-02-09 16:51:57 -0700 (Mon, 09 Feb 2009) $
+$URL: https://rl-glue.googlecode.com/svn/trunk/docs/TechnicalManual.tex $
+</PRE>
+
+<P>
+
+<H1><A NAME="SECTION000120000000000000000">
+About this document ...</A>
+</H1>
+ <STRONG>RL-Glue 3.0 Technical Manual </STRONG><P>
+This document was generated using the
+<A HREF="http://www.latex2html.org/"><STRONG>LaTeX</STRONG>2<tt>HTML</tt></A> translator Version 2002-2-1 (1.71)
+<P>
+Copyright &#169; 1993, 1994, 1995, 1996,
+<A HREF="http://cbl.leeds.ac.uk/nikos/personal.html">Nikos Drakos</A>, 
+Computer Based Learning Unit, University of Leeds.
+<BR>
+Copyright &#169; 1997, 1998, 1999,
+<A HREF="http://www.maths.mq.edu.au/~ross/">Ross Moore</A>, 
+Mathematics Department, Macquarie University, Sydney.
+<P>
+The command line arguments were: <BR>
+ <STRONG>latex2html</STRONG> <TT>TechnicalManual.tex -split 0 -dir tech_html -mkdir -title 'RL-Glue 3.0 Technical Details' -local_icons -math</TT>
+<P>
+The translation was initiated by Brian Tanner on 2009-02-13
+<BR><HR><H4>Footnotes</H4>
+<DL>
+<DT><A NAME="foot349">... Apache-2.0</A><A
+ HREF="TechnicalManual.html#tex2html1"><SUP>1</SUP></A></DT>
+<DD><TT><A NAME="tex2html2"
+  HREF="http://www.apache.org/licenses/LICENSE-2.0.html">http://www.apache.org/licenses/LICENSE-2.0.html</A></TT>
+
+</DD>
+<DT><A NAME="foot350">...
+Autotools</A><A
+ HREF="TechnicalManual.html#tex2html5"><SUP>2</SUP></A></DT>
+<DD><TT><A NAME="tex2html6"
+  HREF="http://sources.redhat.com/autobook/">http://sources.redhat.com/autobook/</A></TT>
+
+</DD>
+<DT><A NAME="foot351">... CYGWIN</A><A
+ HREF="TechnicalManual.html#tex2html7"><SUP>3</SUP></A></DT>
+<DD><TT><A NAME="tex2html8"
+  HREF="http://www.cygwin.com/">http://www.cygwin.com/</A></TT>
+
+</DD>
+<DT><A NAME="foot353">... string</A><A
+ HREF="TechnicalManual.html#tex2html11"><SUP>4</SUP></A></DT>
+<DD><TT><A NAME="tex2html12"
+  HREF="http://glue.rl-community.org/Home/rl-glue/task-spec-language">http://glue.rl-community.org/Home/rl-glue/task-spec-language</A></TT>
+
+</DD>
+</DL><HR>
+<!--Navigation Panel-->
+<IMG WIDTH="81" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next_inactive" SRC="nx_grp_g.png"> 
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up_g.png"> 
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev_g.png">   
+<BR>
+<!--End of Navigation Panel-->
+<ADDRESS>
+Brian Tanner
+2009-02-13
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,876 @@
+\documentclass[11pt]{article}
+
+\usepackage{graphics}
+\usepackage{url}
+\usepackage{verbatim}
+\usepackage{fullpage}
+\usepackage{html}
+%I don't like my paragraphs indented because we have lots of 1-line paragraphs with URLs or code after them
+\setlength{\parindent}{0in} 
+%I like space between my paragraphs
+\setlength{\parskip}{10pt} 
+
+\title{RL-Glue 3.0 Technical Manual }
+\author{Brian Tanner :: brian@tannerpages.com}
+\date{}                                        
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{Introduction}
+
+This document describes how to use RL-Glue when each of the agent, environment, and experiment program is written in C/C++.  This scenario is also known as the \textit{direct-compile} scenario, because all of the
+components can be compiled together into a single executable program.  This contrasts with the more flexible way to use RL-Glue, where the \texttt{rl\_glue} executable server acts as a bridge for agents, environments, and experiment 
+programs written in any of: Python, Lisp, Matlab, Java, or C/C++.  
+
+For general information and motivation about RL-Glue, please read the \htmladdnormallink{RL-Glue overview documentation}{http://rl-glue.googlecode.com/svn/trunk/docs/html/index.html}.  This technical manual is about explaining the finer details of installing RL-Glue and creating direct-compile projects, 
+so we won't rehash all of the high level RL-Glue ideas.
+
+This software project is licensed under the Apache-2.0\footnote{\url{http://www.apache.org/licenses/LICENSE-2.0.html}} license. We're not lawyers, but our intention is that this code 
+should be used however it is useful.  We'd appreciate to hear what you're using it for, and to get credit if appropriate.
+
+This project has a home here:\\
+\url{http://glue.rl-community.org}
+
+
+
+\subsection{Software Requirements}
+This project requires nothing more exotic than a C compiler, Make, etc.  This project uses a configure script that was created by GNU 
+Autotools\footnote{\url{http://sources.redhat.com/autobook/}}, so it should compile and run without problems 
+on most *nix platforms (Unix, Linux, Mac OS X, Windows using CYGWIN\footnote{\url{http://www.cygwin.com/}}). 
+
+\subsection{Getting the Project}
+You can get the codec a number of ways, including from source as a .tar.gz file, or as a binary distribution.
+
+All of the official downloads of the RL-Glue Core can be found here:\newline
+\url{http://code.google.com/p/rl-glue-ext/wiki/RLGlueCore}
+
+You may also check the code out directly from the subversion:
+\texttt{svn checkout http://rl-glue.googlecode.com/svn/trunk rl-glue}
+
+\subsection{Binary Distributions}
+\subsubsection{Windows Binary rl\_glue.exe Package}
+This package is intended for Microsoft Windows users who plan to write agents, environments, and experiments in languages other than C/C++.
+
+This distribution is simply the \texttt{rl\_glue.exe} executable socket server, precompiled for Windows, and the GlueOverview and TechnicalManual PDF files.  Using this distribution does not allow you to install the C/C++ codec, because that codec requires access to certain shared libraries not included in this binary package.
+
+If you use this distribution, you can start \texttt{rl\_glue.exe} a number of ways.  You can just double-click it, for example.  This will probably be very tedious in the long run. 
+
+You should probably put \texttt{rl\_glue.exe} into your \texttt{\$PATH}, so that you can easily find it either from the Windows \texttt{COMMAND} program, or from within other programs like Matlab.  By default, the \texttt{Windows/System} folder is in the path, so if you put \texttt{rl\_glue.exe} in that folder, you will be able to start it easily.  If you put it elsewhere you should consider updating your Windows path to include it.   There are instructions on the Internet that can help you with this, for example \htmladdnormallink{these}{http://www.computerhope.com/issues/ch000549.htm}.
+
+Once \texttt{rl\_glue.exe} is in your \texttt{\$PATH}, you can start it from the windows \texttt{COMMAND} program by typing:
+\begin{verbatim}
+	C:\DOCUME~1\ADMINI~1>rl_glue.exe
+\end{verbatim}
+
+\subsubsection{Intel Mac OX 10.3+ Package}
+This package is intended for all Intel Mac 10.3+ users.
+
+This distribution is an installer package bundled into a Mac Disk Image (.dmg).  This is a graphical installer application and should be fairly self explanatory. This distribution comes with an uninstall script that can be used to remove this codec from your system.
+
+\subsection{Installing From Source}
+The package was made with autotools, which means that you shouldn't have to do much work to get it installed.  
+
+\subsubsection{Simple Install}
+If you are working on your own machine, it is usually easiest to install the headers, libraries, and \texttt{rl\_glue} binary into \texttt{/usr/local}, which is the default 
+installation location but requires \textit{sudo} or \textit{root} access.
+
+The steps are:
+\begin{verbatim}
+	>$ ./configure
+	>$ make
+	>$ sudo make install
+\end{verbatim}
+
+Provided everything goes well, the headers have now been installed to \texttt{/usr/local/include} the libs to \texttt{/usr/local/lib}, and \texttt{rl\_glue} to \texttt{/usr/local/bin}.
+
+\textbf{NOTE:} On many Linux systems, \texttt{/usr/local} is not actually on the library and header search paths by default, but \texttt{/usr} surely is. In this case, you may want to follow the instructions in Section \ref{custom-install-location} system with \texttt{--prefix=/usr}.
+
+
+\subsubsection{Install To Custom Location (maybe without \textit{root} access)}
+\label{custom-install-location}
+You might want to install RL-Glue to a location other than the default of \texttt{/usr/local}.
+
+If you don't have \textit{sudo} or \textit{root} access on the target machine, you can install RL-Glue in your home directory (or other directory you have access to).
+If you install to a custom location, you will need to set your \texttt{CFLAGS} and \texttt{LDFLAGS} variables appropriately when compiling your projects. See Section \ref{sec:custom-flags} for more information.
+
+For example, maybe we want to install RL-Glue to \texttt{/Users/joe/glue}.  The commands are:
+\begin{verbatim}
+	>$ ./configure --prefix=/Users/joe/glue
+	>$ make
+	>$ make install
+\end{verbatim}
+
+Provided everything goes well, the headers, libraries, binaries have been respectively installed to\newline
+\texttt{/Users/joe/glue/include}\newline
+\texttt{/Users/joe/glue/lib}\newline
+\texttt{/Users/joe/glue/bin}
+
+
+\subsubsection{Uninstall}
+If you decide that you don't want  RL-Glue on your machine anymore, you can easily uninstall it.  The procedures varies a tiny bit depending on if you installed it to the default location, or to a custom location.
+
+\subsubsection{RL-Glue Installed To Default Location}
+\begin{verbatim}
+	>$ ./configure
+	>$ sudo make uninstall
+\end{verbatim}
+
+This will remove all of the headers, libraries, and binaries from \texttt{/usr/local}.
+
+\subsubsection{RL-Glue Installed To Custom Location}
+You'll need to make sure that either you haven't reconfigured the directory you downloaded from, or, if you removed/changed that already, you have to run configure again the exact same way as when you installed it.  For example:
+\begin{verbatim}
+	>$ ./configure --prefix=/Users/joe/glue
+	>$ make uninstall
+\end{verbatim}
+
+That's it!  This will remove all of the headers, libraries, and binaries from \texttt{/Users/joe/glue}.
+
+You could also just delete the \texttt{glue} directory, but that may also remove related files and libraries in addition to RL-Glue (codec support files and such that you may have installed).
+
+
+
+\section{Sample Project}
+We have included two example projects with this codec, located in the \texttt{examples} directory.  The  \texttt{skeleton} and \texttt{mines-sarsa-sample} projects each contain an agent, environment, and experiment written in C.
+
+The \texttt{skeleton} contains all of the bare-bones plumbing that is required to create an agent/environment/experiment with this codec and might be a good starting point for creating your own components.
+
+The \texttt{mines-sarsa-sample} contains a fully functional tabular Sarsa learning algorithm, a discrete-observation grid world problem, and an experiment program that can run these together and gather results.  More details below in Section \ref{mines-sarsa-sample}.
+
+In the following sections, we will describe the skeleton project.  Running and using the \texttt{mines-sarsa-sample} is analogous.
+
+
+\subsection{Agent, Environments, and Experiments}
+We have provided a skeleton agent, environment, and experiment program that can be compiled together and run as an experiment.
+This is a good starting point for projects that you may write in the future.  For now, the skeleton is extremely simple.  Before the official RL-Glue 3.0 release, we will add a complete sample learning agent for this and each codec.
+
+We'll start by explaining how to compile and run the experiment, then we'll talk in more detail about each part.
+
+\subsection{Compiling and Running Skeleton}
+If RL-Glue has been installed in the default location, \texttt{/usr/local}, then you can compile and run the experiment like:
+\begin{verbatim}
+	>$ cd examples/skeleton/
+	>$ make
+	>$ ./SkeletonExperiment
+\end{verbatim}
+
+We will spend a little bit talking about how to compile the project, because not everyone is comfortable with using a \texttt{Makefile}.  To compile
+the project from the command line, you could do:
+\begin{verbatim}
+	>$ cc *.c -lrlglue -lrlutils -o SkeletonExperiment
+\end{verbatim}
+
+It might be useful to break this down a little bit:
+\begin{description}
+\item [cc] The C compiler.  You could also use \texttt{gcc} or \texttt{g++}, etc.
+\item [*.c] Compile \texttt{SkeletonExperiment.c} \texttt{SkeletonAgent.c} \texttt{SkeletonEnvironment.c} sources files.
+\item [-lrlglue] Link to the RLGlue library.  This is where the \textit{glue} that connects the three components is defined.
+\item [-lrlutils] Link to the RLUtils library, which comes with RL-Glue.  This library contains convenience functions for allocating and cleaning up the structure types (Section \ref{sec:util-functions}).  If you 
+don't use these convenience functions, you don't need this library.
+\end{description}
+
+
+At this point, we've compiled the project, now we just have to run the experiment:
+\begin{verbatim}
+	>$ ./SkeletonExperiment
+\end{verbatim}
+
+You should see output like the following if it worked:
+\begin{verbatim}
+	>$ ./SkeletonExperiment
+	Experiment starting up!
+	RL_init called, the environment sent task spec: VERSION RL-Glue-3.0 
+		PROBLEMTYPE episodic DISCOUNTFACTOR 1.0 OBSERVATIONS INTS (0 20) 
+		ACTIONS INTS (0 1)  REWARDS (-1.0 1.0)  
+		EXTRA skeleton_environment(C/C++) by Brian Tanner.
+
+	----------Sending some sample messages----------
+	Agent responded to "what is your name?" with: my name is skeleton_agent!
+	Agent responded to "If at first you don't succeed; call it version 1.0"
+	 with: I don't know how to respond to your message
+
+	Environment responded to "what is your name?" with: my name is skeleton_environment!
+	Environment responded to "If at first you don't succeed;
+	 call it version 1.0" with: I don't know how to respond to your message
+
+
+	----------Running a few episodes----------
+	Episode 0	 100 steps 	0.000000 total reward	 0 natural end 
+	Episode 1	 90 steps 	-1.000000 total reward	 1 natural end 
+	Episode 2	 56 steps 	1.000000 total reward	 1 natural end 
+	Episode 3	 100 steps 	0.000000 total reward	 0 natural end 
+	Episode 4	 96 steps 	-1.000000 total reward	 1 natural end 
+	Episode 5	 1 steps 	0.000000 total reward	 0 natural end 
+	Episode 6	 106 steps 	1.000000 total reward	 1 natural end 
+
+
+	----------Stepping through an episode----------
+	First observation and action were: 10 1
+
+
+	----------Summary----------
+	It ran for 204 steps, total reward was: -1.000000
+\end{verbatim}
+
+That's all there is to it! You just ran a direct-compile RL-Glue experiment! Congratulations!
+
+%Find a place for this
+\subsection{Custom Flags for Custom Installs}
+\label{sec:custom-flags}
+If RL-Glue has been installed in a custom location (for example: \texttt{/Users/joe/glue}), then you will
+need to set the header search path in \texttt{CFLAGS} and the library search path in \texttt{LDFLAGS}.  You can either do this each time you call make, 
+or you can export the values as environment variables.
+
+To do it on the command line:
+\begin{verbatim}
+>$ CFLAGS=-I/Users/joe/glue/include LDFLAGS=-L/Users/joe/glue/lib make
+\end{verbatim}
+
+That might turn out to be quite a hassle to type those flags all the time while you are developing.  In that case, you can either update the \texttt{Makefile} to include these flags, 
+or set an environment variable.  If you are using the bash shell you can \texttt{export} the environment variables:
+\begin{verbatim}
+>$ export CFLAGS=-I/Users/joe/glue/include
+>$ export LDFLAGS=-L/Users/joe/glue/lib
+>$ make
+\end{verbatim}
+
+In some cases, you may be able to compile and link your programs without incident, but you receive shared library loading errors when you try to execute them, as mentioned in Gotchas! (Section \ref{sec:gotchas-shared-libs}).
+
+In these cases, you may also have to set \texttt{LD\_LIBRARY\_PATH} (Linux) or \texttt{DYLD\_LIBRARY\_PATH} (OS X) environment variables, like:
+\begin{verbatim}
+	>$ export LD_LIBRARY_PATH=/Users/joe/glue/lib
+\end{verbatim}
+
+In some cases (64-bit linux looks in \texttt{/usr/local/lib64}?) you may have to use this approach even when RL-Glue is installed in the default location:
+\begin{verbatim}
+	>$ export LD_LIBRARY_PATH=/usr/local/lib
+\end{verbatim}
+
+When you open a new terminal window, all of these environment variables will be lost unless you put the appropriate \texttt{export} lines in your shell startup script.
+
+
+\subsection{Skeleton Agent}
+\label{sec:agent}
+Th Skeleton agent implements all the required functions and provides a good example of how to create a simple agent.
+
+The pertinent files are:
+\begin{verbatim}
+	examples/skeleton/SkeletonAgent.c
+\end{verbatim}
+
+This agent does not learn anything and randomly chooses integer action $0$ or $1$.
+
+The Skeleton agent is very simple and well documented, so we won't spend any more time talking about it in these instructions.
+Please open it up and take a look.
+
+
+
+\subsection{Skeleton Environment}
+\label{sec:env}
+The Skeleton environment provides a good example of how to create a simple environment. 
+
+The pertinent files are:
+\begin{verbatim}
+	examples/skeleton_environment/SkeletonEnvironment.c
+\end{verbatim}
+
+This environment is episodic, with 21 states, labeled $\{0, 1,\ldots,19,20\}$. States $\{0, 20\}$ are terminal and return rewards of $\{-1, +1\}$ respectively.  The other states return reward of $0$.
+There are two actions, $\{0, 1\}$.  Action $0$ decrements the state number, and action $1$ increments it. The environment starts in state 10.
+
+The Skeleton environment is very simple and well documented, so we won't spend any more time talking about it in these instructions.
+Please open it up and take a look.
+
+
+\subsection{Skeleton Experiment}
+The Skeleton experiment implements all the required functions and provides a good example of how to create a simple experiment.  This section will follow the same 
+pattern as the agent version (Section \ref{sec:agent}).  This section will be less detailed because many ideas are similar or identical.
+
+The pertinent files are:
+\begin{verbatim}
+	examples/skeleton_experiment/SkeletonExperiment.c
+\end{verbatim}
+
+This experiment runs \texttt{RL\_Episode} a few times, sends some messages to the agent and environment, and then steps through one episode using \texttt{RL\_step}.
+
+The Skeleton experiment is very simple and well documented, so we won't spend any more time talking about it in these instructions.
+Please open it up and take a look.
+
+
+
+\subsection{Gotchas!}
+\subsubsection{Crashes and Bus Errors in Experiment Program}
+If you are running an experiment using \texttt{RL\_step}, beware that the last step (when \texttt{terminal==1}), the action will be empty.  If you try to access the values of the actions in this 
+case, you may crash your program.
+
+\subsubsection{Shared Library Loading Errors}
+\label{sec:gotchas-shared-libs}
+On some machines we've used, RL-Glue installs without incident, but when the experiment is run, the system gives an error message similar to:
+\begin{verbatim}
+	>$ ./SkeletonExperiment: error while loading shared libraries: librlglue-3:0:0.so.1:
+	cannot open shared object file: No such file or directory
+\end{verbatim}
+
+If this happens, the operating system might have an alternate search path, and might not be looking in \texttt{/usr/local/lib} for libraries. 
+You can troubleshoot this problem by doing:
+\begin{verbatim}
+	>$ LD_DEBUG=libs ./SkeletonExperiment
+\end{verbatim}
+If you see that \texttt{/usr/local/lib} is not in the search path, you may want to add it to your library search path using \texttt{LDFLAGS} or \texttt{LD\_LIBRARY\_PATH}.  See Section \ref{sec:custom-flags} for more information.  
+
+
+
+\subsection{Going Further -- Mines Sarsa Example Project}
+\label{mines-sarsa-sample}
+The \texttt{skeleton} sample project is extremely limited and only shows the mechanics of how RL-Glue components are structured.  The \texttt{mines-sarsa} sample project is much richer.
+
+\subsubsection{Sample-Mines-Environment}
+\label{mines-sample}
+The 
+\htmladdnormallink{mines
+ environment}{http://code.google.com/p/rl-glue/source/browse/trunk/examples/mines-sarsa-sample/SampleMinesEnvironment.c} 
+is internally a two-dimensional, discrete grid world where the agent receives a penalty per step until reaching a goal state, hopefully without stepping on any exploding land-mines along the way.  The (x,y) state is flattened into a discrete, scalar observation for the agent.  This environment can receive special messages from the experiment program to print the current state to the screen, and also to toggle between random starting states and a fixed starting-state specified by the experiment.
+
+The task specification string\footnote{\url{http://glue.rl-community.org/Home/rl-glue/task-spec-language}} is manually created because there is not yet a task spec builder for C/C++. 
+
+\subsubsection{Samples-Sarsa-Agent}
+\label{sarsa-sample}
+The 
+\htmladdnormallink{SARSA agent}{http://code.google.com/p/rl-glue/source/browse/trunk/examples/mines-sarsa-sample/SampleSarsaAgent.c}
+is a tabular learning agent that uses $\epsilon-greedy$ exploration as described in \htmladdnormallink{Reinforcement Learning: An Introduction}{http://www.cs.ualberta.ca/~sutton/book/ebook/node64.html} by Sutton and Barto.
+
+The SARSA agent parses the task specification string using the C/C++ task spec parser.  This agent can receive special messages from the experiment program to pause/unpause learning, pause/unpause exploring, save the current value function to a file, and load the the value function from a file.
+
+\subsubsection{Sample-Experiment}
+The sample experiment program runs the show.  First, it alternates running the agent in the environment for a number of episodes, and telling the agent to pause learning so that the current performance can be evaluated.  These results are saved to a comma-separated-value file.
+
+The sample experiment then tells the agent to save the value function to a file, and then resets the experiment (and agent) to initial conditions.  After verifying that the agent's initial policy is bad, the experiment tells the agent to load the value function from the file.  The agent is evaluated again using this previously-learned value function, and performance is dramatically better.
+
+Finally, the experiment sends a message to specify that the environment should use a fixed (instead of random) starting state, and runs the agent from that fixed start state for a while.
+
+\section{Advanced Features}
+\subsection{Listening on Custom Ports}
+When connecting to RL\_Glue from languages other than C/C++, the agents/environments/experiments that are connecting will be using a \texttt{codec} written for a different language.  These codecs connect to the \texttt{rl\_glue} executable server over sockets (either locally on your machine, or over the Internet).
+
+Sometimes you will want run the \texttt{rl\_glue} server on a port other than the default
+($4096$) either because of firewall issues, or because you want to run multiple instances on the same machine.
+
+In these cases, you can tell the \texttt{rl\_glue} executable to listen on a custom port using the environment variable \texttt{RLGLUE\_PORT}.
+
+For example, try the following code:
+\begin{verbatim}
+	> $ RLGLUE_PORT=1025 rl_glue
+\end{verbatim}
+
+That command could give output like:
+\begin{verbatim}
+	RL-Glue Version 3.0-RC1a, Build 882
+	RL-Glue is listening for connections on port=1025
+\end{verbatim}
+
+If you don't like typing it every time, you can export it so that the value will be set for future
+calls to \texttt{rl\_glue} in the same session:
+\begin{verbatim}
+	> $ export RLGLUE_PORT=1025
+	> $ rl_glue 
+\end{verbatim}
+
+Remember, on most *nix systems, you need \texttt{superuser} privileges to listen on ports lower than $1024$, so you probably want to pick one higher than that.
+
+
+\section{Who creates and frees memory?}
+Memory management can be confusing in C/C++.  It might seem especially mysterious when using RL-Glue, because sometimes the structures are passed directly 
+from function to function (in direct-compile RL-Glue), but other times they are written and read through a network socket (with the C/C++ network codec).
+
+\subsection{Copy-On-Keep}
+The rule of thumb to follow in RL-Glue is what we call \textit{copy-on-keep}.  Copy-on-keep means that when you are passed a dynamically allocated structure, you should
+only consider it valid within the function that it was given to you.  If you need a persistent copy of the data outside of that scope, you should make a copy: copy it if you
+need to keep it.
+
+\subsubsection{Task Spec Example}
+\begin{verbatim}
+/********************   UNSAFE   *******************/
+char* task_spec_copy=0;
+	
+void agent_init(const char* task_spec){
+        /*
+            Not making a copy, just keeping a pointer to the data
+            Compiler will even complain 
+        */
+    task_spec_copy=task_spec;
+}
+
+const action_t* agent_start(const observation_t* this_observation) {
+        /*
+            Behavior undefined.  Who knows if the string the task_spec
+            was originally pointing to still exists?
+        */
+    printf("Task spec we saved is: %s\n",task_spec_copy);
+    ...
+\end{verbatim}
+
+\begin{verbatim}
+/********************   SAFE   *******************/
+char* task_spec_copy=0;
+	
+void agent_init(const char* task_spec){
+        /*
+            Allocating space (need length+1 for the terminator character)
+        */
+    task_spec_copy=(char *)calloc(strlen(task_spec)+1, sizeof(char));
+    strcpy(task_spec_copy,task_spec);
+}
+
+const action_t* agent_start(const observation_t* this_observation) {
+        /*
+            This is fine, because even if 
+            the task_spec was freed, we have a copy.
+        */
+    printf("Task spec we saved is: %s\n",task_spec_copy);
+    ...
+\end{verbatim}
+
+
+\subsubsection{Observation Example (using helper library)}
+
+
+\begin{verbatim}
+/********************   UNSAFE   *******************/
+observation_t* last_observation=0;
+const action_t* agent_start(const observation_t *this_observation) {
+        /*
+            Unsafe, points last_observation to this_observation's arrays!
+            Compiler will even complain (that's new)		
+        */
+    last_observation=this_observation;
+...
+\end{verbatim}
+
+\begin{verbatim}
+/********************   SAFE   *******************/
+observation_t* last_observation=0;
+const action_t* agent_start(const observation_t *this_observation) {
+        /*
+           This helper function allocates a new struct and 
+           copies from this_observation!
+        */
+    last_observation=duplicateRLStructToPointer(this_observation);
+...
+\end{verbatim}
+
+Alternatively, if we already had a pointer to a \texttt{observation\_t}.
+\begin{verbatim}
+/**************   Alternate 1 SAFE   *************/
+    /*Somewhere else in the code*/
+    observation_t* last_observation=allocateRLStructPointer(0,0,0);
+    ...
+
+const action_t* agent_start(const observation_t *this_observation) {
+    /*
+       This helper function allocates memory inside last_observation
+       if necessary and copies this_observation into it!
+    */
+
+    replaceRLStruct(this_observation,last_observation);
+...
+\end{verbatim}
+
+Or, if you don't like working with pointers:
+\begin{verbatim}
+/**************   Alternate 2 SAFE   *************/
+observation_t last_observation={0}; /* Not a pointer */
+const action_t* agent_start(const observation_t *this_observation) {
+        /*
+           This helper function allocates memory inside last_observation
+           if necessary and copies this_observation into it!
+        */
+    
+    replaceRLStruct(this_observation,&last_observation);
+...
+\end{verbatim}
+
+Remember that any memory that you allocate within an agent, environment, or experiment the old fashioned way \texttt{malloc/new} or using the convenience functions in \texttt{<rlglue/utils/C/RLStruct\_util.h>} should be released
+by you in the appropriate \texttt{cleanup} function.
+\subsection{Free Your Mess}
+When using RL-Glue, you are responsible for cleaning up any memory that you allocate. The good news is that that you can trust that between function calls, any memory you've returned to a caller has either been
+copied or is not necessary (it is safe to free it).  Remember that in C/C++ it's not safe to return pointers to stack-based memory.
+
+The Skeleton examples do the appropriate thing in this respect: the \texttt{intArrays} that need to be dynamically allocated are allocated in the \texttt{\_init} methods, and then the memory is released in the \texttt{\_cleanup} methods.
+
+\subsubsection{Messaging Examples}
+Copying, comparing, and allocating Strings in C can be tricky, so here are a couple of examples:
+
+\begin{verbatim}
+/********************   UNSAFE   *******************/
+const char* agent_message(const char* inMessage) {
+    char theBuffer[1024];
+    sprintf(theBuffer,"this is an example response message\n");
+        /*
+            This returns the address of a local variable
+            bad idea and compiler will complain
+        */
+    return theBuffer;
+}
+\end{verbatim}
+
+\begin{verbatim}
+/****************   UNSAFE (MEMORY LEAK)   ***************/
+const char* agent_message(const char* inMessage) {
+    char theBuffer[1024];
+    char* returnString=0;
+    sprintf(theBuffer,"this is an example response message\n");
+    returnString=(char *)calloc(strlen(theBuffer)+1,sizeof(char));
+    strcpy(returnString,theBuffer);
+        /*
+            Memory leak... every time this function is called
+            a new returnString is allocated, but nobody will
+            ever clean them up!
+        */
+    return returnString;
+}
+\end{verbatim}
+
+\begin{verbatim}
+/********************   SAFE   *******************/
+char* agentReturnString=0; /*Global Variable */	
+const char* agent_message(const char* inMessage) {
+    char theBuffer[1024];
+    sprintf(theBuffer,"this is an example response message\n");
+
+        /*
+            This code will free the memory on subsequent calls
+        */
+    if(agentReturnString!=0){
+        free(agentReturnString);
+        agentReturnString=0;
+    }
+    agentReturnString=(char *)calloc(strlen(theBuffer)+1,sizeof(char));
+    strcpy(agentReturnString,theBuffer);
+    return agentReturnString;
+}
+\end{verbatim}
+
+
+
+\section{Socket Connections and Codecs}
+When using socket mode: the agent, environment, and experiment programs communicate with the \texttt{rl\_glue} server over sockets.  This can be either within a single machine, or over the Internet.
+
+RL-Glue uses TCP/IP connections between all of the components.  RL-Glue operates in lock-step, not asynchronously.  There is no time-out mechanism, RL-Glue will wait for an agent or environment to return from a remote function call indefinitely unless the connection is terminated.  This is by design.   By default, RL-Glue listens (and codecs connect to) port $4096$ on \texttt{localhost}.
+
+In the future, an advanced technical guide will be available that describes how to write a codec to allow the language of your choice to connect to RL-Glue over sockets.  This will be an integral part of the growth and standardization of RL-Glue to a growing number of platforms and languages.  Until then, please contact us directly on the RL-Glue mailing list for further information:\\
+\url{http://groups.google.com/group/rl-glue}
+
+It's not impossible!  At least one enterprising individual, Gabor Balazs, has written a codec (LISP) without any direct help from the core RL-Glue team.  
+
+\section{RL-Glue C/C++ Specification Reference}
+This section will explain how the RL-Glue types and functions are defined for C/C++.  This is important both for direct-compile experiments, and for components that
+ use the C/C++ network codec.
+
+\subsection{Types}
+The types used here will be the same for the C/C++ network codec.
+
+\subsubsection{Simple Types}
+The simple types are:
+
+\begin{verbatim}
+    Reward          : double
+    Terminal Flag   : int
+    Message         : char*
+    Task_Spec       : char*
+\end{verbatim}
+
+\def\rat{rl\_abstract\_type\_t}
+
+\subsubsection{Structure Types}
+\label{sec:structure-types}
+All of the major structure types (observations, actions) are typedef'd to \texttt{\rat}.
+
+\begin{verbatim}
+typedef struct
+{
+    unsigned int numInts;
+    unsigned int numDoubles;
+    unsigned int numChars;
+    int* intArray;
+    double* doubleArray;
+    char* charArray;
+} rl_abstract_type_t;
+\end{verbatim}
+
+The specific names and definitions of the structure types are:
+\begin{verbatim}
+    typedef rl_abstract_type_t observation_t;
+    typedef rl_abstract_type_t action_t;
+\end{verbatim}
+
+The composite structure types are:
+\begin{verbatim}
+	typedef struct{
+	    const observation_t *observation;
+	    const action_t *aaction;
+	} observation_action_t;
+
+	typedef struct{
+	    double reward;
+	    const observation_t *observation;
+	    int terminal;
+	} reward_observation_terminal_t;
+
+	typedef struct {
+	    double reward;
+	    const observation_t *observation;
+	    const action_t *action;
+	    int terminal;
+	} reward_observation_action_terminal_t;
+\end{verbatim}
+
+\subsubsection{Summary}
+The type names are:
+\begin{verbatim}
+    observation_t
+    action_t
+    observation_action_t
+    reward_observation_terminal_t
+    reward_observation_action_terminal_t
+\end{verbatim}
+
+
+\subsection{Functions}
+\subsubsection{Agent Functions}
+All agents \textbf{should implement} these functions, located in \texttt{rlglue/Agent\_common.h}
+\begin{verbatim}
+	void agent_init(const char* task_spec);
+	const action_t* agent_start(const observation_t* observation);
+	const action_t* agent_step(double reward, const observation_t* observation);
+	void agent_end(double reward);  
+	void agent_cleanup();
+	const char* agent_message(const char* message);
+\end{verbatim}
+
+\subsubsection{Environment Functions}
+All environments \textbf{should implement} these functions, located in \texttt{rlglue/Environment\_common.h}
+\begin{verbatim}
+	const char* env_init();
+	const observation_t* env_start();
+	const reward_observation_terminal_t* env_step(const action_t* action);
+	void env_cleanup();
+	const char* env_message(const char * message);
+\end{verbatim}
+
+\subsubsection{Experiments Functions}
+All experiments \textbf{can call} these functions, located in \texttt{rlglue/RL\_glue.h}
+\begin{verbatim}
+	const char* RL_init();
+	const observation_action_t *RL_start();
+	const reward_observation_action_terminal_t *RL_step();
+	void RL_cleanup();
+
+	const char* RL_agent_message(const char* message);
+	const char* RL_env_message(const char* message);
+
+	double RL_return();
+	int RL_num_steps();
+	int RL_num_episodes();
+	int RL_episode(unsigned int num_steps);
+\end{verbatim}
+
+\subsubsection{RLUtils Library Functions}
+\label{sec:util-functions}
+You can get access to these functions by linking to libRLUtils (\texttt{-lrlutils}) and by including the appropriate header:
+
+\begin{verbatim}
+#include <rlglue/utils/C/RLStruct_util.h>
+\end{verbatim}
+
+Prototypes with documentation can be found \htmladdnormallink{here}{http://code.google.com/p/rl-glue/source/browse/trunk/src/rlglue/utils/C/RLStruct_util.h}.
+
+\begin{verbatim}
+	void replaceRLStruct(const rl_abstract_type_t *src, rl_abstract_type_t *dst);
+
+	void clearRLStruct(rl_abstract_type_t *dst);
+
+	void freeRLStructPointer(rl_abstract_type_t *dst);
+
+	void reallocateRLStruct(rl_abstract_type_t *dst, 
+                            const unsigned int numInts,
+                            const unsigned int numDoubles,
+                            const unsigned int numChars);
+
+	void allocateRLStruct(rl_abstract_type_t *dst, 
+                          const unsigned int numInts,
+                          const unsigned int numDoubles, 
+                          const unsigned int numChars);
+
+rl_abstract_type_t *allocateRLStructPointer(const unsigned int numInts,
+                                            const unsigned int numDoubles,
+                                            const unsigned int numChars);
+
+rl_abstract_type_t *duplicateRLStructToPointer(const rl_abstract_type_t *src);
+
+
+\end{verbatim}
+
+
+
+\section{Changes and 2.x Backward Compatibility}
+There were many changes from RL-Glue 2.x to RL-Glue 3.x.  Most of them are at the level of the API and project organization, and are addressed in the \htmladdnormallink{RL-Glue overview documentation}{http://rl-glue.googlecode.com/svn/trunk/docs/html/index.html}, not this technical manual.
+
+\subsection{Build Changes}
+We're not manually writing Makefiles anymore!  We've moved both RL-Glue and the C/C++ Codec to a \htmladdnormallink{GNU autotools system}{http://www.gnu.org/software/autoconf/}.
+You can build these projects using the following standard Linux/Unix procedure now:
+\begin{verbatim}
+	>$ ./configure
+	>$ make
+	>$ sudo make install
+\end{verbatim}
+
+\subsection{Header Location Changes}
+\subsubsection{Agents}
+\begin{verbatim}
+Old: #include <RL_common.h>
+New: #include <rlglue/Agent_common.h>
+\end{verbatim}
+
+\subsubsection{Environments}
+\begin{verbatim}
+Old: #include <RL_common.h>
+New: #include <rlglue/Environment_common.h>
+\end{verbatim}
+
+\subsubsection{Experiments}
+\begin{verbatim}
+Old: #include <RL_glue.h>
+New: #include <rlglue/RL_glue.h>
+\end{verbatim}
+
+\subsubsection{Miscellaneous}
+\begin{verbatim}
+Old: #include <RL_network.h>
+New: #include <rlglue/network/RL_network.h>
+\end{verbatim}
+
+\subsection{Typedefs}
+This is a big one. We revamped all of the type names for C/C++.  We made them all lower case, and added ``\_t'' to them to identify them as types.  This should reduce confusion so there is no more code like:\newline
+\texttt{Observation observation;}
+
+Instead it'll be:\newline
+\texttt{observation\_t observation;}
+
+We think the latter is easier to read.  We've also stopped using \texttt{typdef} for \texttt{reward}, \texttt{task\_spec}.  A first beta of RL-Glue 3.0 and the C/C++ codec had new types \texttt{message\_t} and \texttt{terminal\_t}: these have been removed also.  Feedback from the community was that people preferred to see the actual types instead of these surrogates.
+
+The first beta of RL-Glue 3.0 also had a file called \texttt{legacy\_types.h} that would allow you to use the old type names.  This has been removed as of Release Candidate 4 (RC4) because of the major overhaul from structures to pointers (see Section \ref{pointers}). Sorry. 
+
+\subsection{Composite Structures}
+
+\subsubsection{Member Naming}
+In RL-Glue 2.x, composite structures took the form:
+\begin{verbatim}
+typedef struct Reward_observation_t{
+   Reward r;
+   Observation o;
+   int terminal;
+} Reward_observation;
+\end{verbatim}
+
+Unfortunately, it is very inconsistent that the reward and observation are \texttt{r} and \texttt{o} respectively, 
+while the terminal flag is \texttt{terminal}.  With the second pass of RL-Glue 3.0 we are moving to a more verbose 
+naming scheme: we will fully name each member of these composite structs as \texttt{reward}, \texttt{action}, 
+\texttt{observation}, or \texttt{terminal}.
+
+
+
+
+\subsection{Const-Correctness and the Pointer Revolution}
+\label{pointers}
+This is another big one.  This was not originally planned for RL-Glue 3.0, and it breaks backward compatibility with RL-Glue
+2.x in a serious way.  However, the payoff we hope to get by making the code easier to understand and debug should be 
+worth the effort in the long run.
+
+Many of the old function prototypes in RL-Glue passed structures by value.  A typical example:\newline
+\texttt{Action agent\_step(Reward r, Observation o);}
+
+In this example, Action and Observation are \texttt{struct}s, and Reward \texttt{typdef}'d to \texttt{double}.  In the 
+first revision of RL-Glue 3.0 we updated to:\newline
+\texttt{action\_t agent\_step(reward\_t r, observation\_t o);}
+
+Notice in this version that it might not be intuitive whether \texttt{r}, the reward, is a structure or a primitive type.  
+Safety is also not obvious: can the agent expect that the returned action will be changed by RL-Glue?  Should the agent 
+\texttt{free} the dynamic arrays in \texttt{o} when finished with it? 
+
+With the second pass of updates, we've taken the next leap to:\newline
+\texttt{const action\_t* agent\_step(double reward, const observation\_t* observation);}
+
+We feel it is more clear with this prototype that the agent should not try to change the observation, and that 
+RL-Glue will not change the action.  You can easily defeat these safety checks by casting away the \texttt{const}, 
+but at least the compiler will yell at you if you accidentally try to break the rules.
+
+We have made these sorts of changes to all functions that accept or return any derivative of 
+\texttt{rl\_abstract\_type\_t}.
+
+
+
+
+
+\section{Frequently Asked Questions}
+\subsection{Where can I get more help?}
+\subsubsection{Online FAQ}
+We suggest checking out the online RL-Glue C/C++ Codec FAQ:\newline
+\url{http://glue.rl-community.org/Home/rl-glue#TOC-Frequently-Asked-Questions}
+
+The online FAQ may be more current than this document, which may have been distributed some time ago.
+
+\subsubsection{Google Group / Mailing List}
+First, you should join the RL-Glue Google Group Mailing List:\newline
+\url{http://groups.google.com/group/rl-glue}
+
+We're happy to answer any questions about RL-Glue.  Of course, try to search through previous messages first in case your question has been answered before.
+
+\subsection{How can I tell what version of RL-Glue is installed?}
+You can find out the release number, and the specific build number by 
+calling RL-Glue with invalid (any) parameters.  For example:
+\begin{verbatim}
+> $ rl_glue --help
+    RL-Glue Version 3.0-RC1a, Build 882
+
+        rl_glue version	=	3.0-RC1a
+        build number	=	882
+
+    Usage: $:>rl_glue
+
+    By default rl_glue listens on port 4096.
+    To choose a different port, set environment variable RLGLUE_PORT.
+\end{verbatim}
+
+This tells you that the name of the release you have installed is \texttt{3.0-RC1a}, and the 
+specific build from subversion is \texttt{r882}.
+
+
+\subsection{Error: ``C compiler cannot create executables'' when building RL-Glue}
+
+We have seen this on a fresh Linux Ubuntu machine.  Try installing g++:
+\begin{verbatim}
+> $ sudo apt-get install g++
+\end{verbatim}
+
+
+\section{Credits and Acknowledgements}
+Andrew Butcher originally wrote the RL-Glue library and network library.  Thanks Andrew.
+
+Brian Tanner has since grabbed the torch and has continued to develop RL-Glue and the codecs.
+
+Special thanks to Scott Livingston for creating the new C/C++ task spec parser.
+
+\subsection{Contributing}
+If you would like to become a member of this project and contribute updates/changes to the code, please send a message to rl-glue@googlegroups.com.
+
+
+\section*{Document Information}
+\begin{verbatim}
+Revision Number: $Rev: 986 $
+Last Updated By: $Author: brian@tannerpages.com $
+Last Updated   : $Date: 2009-02-13 10:29:15 -0700 (Fri, 13 Feb 2009) $
+$URL: http://rl-glue.googlecode.com/svn/trunk/docs/TechnicalManual.tex $
+\end{verbatim}
+
+\end{document} 

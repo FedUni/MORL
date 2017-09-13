@@ -1,0 +1,1092 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>RL-Glue 3.0</TITLE>
+<META NAME="description" CONTENT="RL-Glue 3.0">
+<META NAME="keywords" CONTENT="Glue-Overview">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="Glue-Overview.css">
+
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<IMG WIDTH="81" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next_inactive" SRC="nx_grp_g.png"> 
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up_g.png"> 
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev_g.png">   
+<BR>
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+<H1 ALIGN="CENTER">RL-Glue 3.0 Overview</H1>
+<DIV>
+
+<P ALIGN="CENTER"><STRONG>Adam White :: awhite@cs.ualberta.ca</STRONG></P>
+</DIV>
+<BR>
+
+<H2><A NAME="SECTION00010000000000000000">
+Contents</A>
+</H2>
+<!--Table of Contents-->
+
+<UL>
+<LI><A NAME="tex2html73"
+  HREF="Glue-Overview.html#SECTION00020000000000000000">Introduction</A>
+<UL>
+<LI><A NAME="tex2html74"
+  HREF="Glue-Overview.html#SECTION00021000000000000000">Purpose of Document</A>
+<LI><A NAME="tex2html75"
+  HREF="Glue-Overview.html#SECTION00022000000000000000">How to Use This Document</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html76"
+  HREF="Glue-Overview.html#SECTION00030000000000000000">RL-Glue Concepts</A>
+<UL>
+<LI><A NAME="tex2html77"
+  HREF="Glue-Overview.html#SECTION00031000000000000000">Agents, Environments and Experiment Programs</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html78"
+  HREF="Glue-Overview.html#SECTION00040000000000000000">RL-Glue Environment Programs</A>
+<UL>
+<LI><A NAME="tex2html79"
+  HREF="Glue-Overview.html#SECTION00041000000000000000">Essential Components Of A RL-Glue Environment</A>
+<LI><A NAME="tex2html80"
+  HREF="Glue-Overview.html#SECTION00042000000000000000">Additional Components Of A RL-Glue Environment</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html81"
+  HREF="Glue-Overview.html#SECTION00050000000000000000">RL-Glue Agent Programs</A>
+<UL>
+<LI><A NAME="tex2html82"
+  HREF="Glue-Overview.html#SECTION00051000000000000000">Essential Components Of A RL-Glue Agent</A>
+<LI><A NAME="tex2html83"
+  HREF="Glue-Overview.html#SECTION00052000000000000000">Additional Components Of A RL-Glue Agent</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html84"
+  HREF="Glue-Overview.html#SECTION00060000000000000000">RL-Glue Experiment Programs</A>
+<UL>
+<LI><A NAME="tex2html85"
+  HREF="Glue-Overview.html#SECTION00061000000000000000">Basic Experiment Programs</A>
+<LI><A NAME="tex2html86"
+  HREF="Glue-Overview.html#SECTION00062000000000000000">Advanced Experiment Programs</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html87"
+  HREF="Glue-Overview.html#SECTION00070000000000000000">Command and Function Reference</A>
+<UL>
+<LI><A NAME="tex2html88"
+  HREF="Glue-Overview.html#SECTION00071000000000000000">Agent Functions</A>
+<LI><A NAME="tex2html89"
+  HREF="Glue-Overview.html#SECTION00072000000000000000">Environment Functions</A>
+<LI><A NAME="tex2html90"
+  HREF="Glue-Overview.html#SECTION00073000000000000000">Interface Routines Provided by the RL-Glue</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html91"
+  HREF="Glue-Overview.html#SECTION00080000000000000000">Changes from RL-Glue 2.x</A>
+<UL>
+<LI><A NAME="tex2html92"
+  HREF="Glue-Overview.html#SECTION00081000000000000000">The Codec Split</A>
+<LI><A NAME="tex2html93"
+  HREF="Glue-Overview.html#SECTION00082000000000000000">Build Changes</A>
+<LI><A NAME="tex2html94"
+  HREF="Glue-Overview.html#SECTION00083000000000000000">API Changes</A>
+<LI><A NAME="tex2html95"
+  HREF="Glue-Overview.html#SECTION00084000000000000000">Type Changes</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html96"
+  HREF="Glue-Overview.html#SECTION00090000000000000000">Frequently Asked Questions</A>
+<UL>
+<LI><A NAME="tex2html97"
+  HREF="Glue-Overview.html#SECTION00091000000000000000">Where can I get more help?</A>
+<LI><A NAME="tex2html98"
+  HREF="Glue-Overview.html#SECTION00092000000000000000">Can I write my agents in &lt; insert language here &gt;</A>
+<LI><A NAME="tex2html99"
+  HREF="Glue-Overview.html#SECTION00093000000000000000">Does RL-Glue support multi-agent reinforcement learning?</A>
+<LI><A NAME="tex2html100"
+  HREF="Glue-Overview.html#SECTION00094000000000000000">Why isn't the RL-Glue interface object oriented?</A>
+<LI><A NAME="tex2html101"
+  HREF="Glue-Overview.html#SECTION00095000000000000000">What does Observation mean? Why does the RL-Glue not pass around ``states''?</A>
+<LI><A NAME="tex2html102"
+  HREF="Glue-Overview.html#SECTION00096000000000000000">Where is the ``environmental state" stored in RL-Glue? In other systems, such as CLSquare, the old state is passed to the environment step function.</A>
+<LI><A NAME="tex2html103"
+  HREF="Glue-Overview.html#SECTION00097000000000000000">Can RL-Glue handle sampling the same trajectory a number of times consecutively?</A>
+<LI><A NAME="tex2html104"
+  HREF="Glue-Overview.html#SECTION00098000000000000000">Why is there no RL_freeze, RL_unfreeze or RL_frozen?</A>
+</UL></UL>
+<!--End of Table of Contents-->
+<P>
+
+<H1><A NAME="SECTION00020000000000000000">
+Introduction</A>
+</H1>
+
+<H2><A NAME="SECTION00021000000000000000">
+Purpose of Document</A>
+</H2>
+This document has been laid out so that it can be used for: 
+
+<OL>
+<LI><B>RL-Glue what?</B> learning about RL-Glue at an abstract level
+</LI>
+<LI><B>Compatibility:</B> converting existing agents and environments to RL-Glue
+</LI>
+<LI><B>Plugging agents and environments together:</B> writing experiment programs
+</LI>
+<LI><B>What function for...:</B> quick reference for RL-Glue functions
+</LI>
+</OL>
+
+<P>
+In September 2008, immediately preceding RL-Glue 3.0 development, the RL-Glue Project was split into two projects: RL-Glue and RL-Glue Extensions.
+
+<P>
+RL-Glue now only includes the RL-Glue interface and plugs for direct-compile C/C++ agents, environments and experiment programs.
+
+<P>
+The RL-Glue Extensions Project contains codecs that provide cross language support for RL-Glue (C/C++, Java, Python, Matlab, Lisp, etc).  This multi-language support was previously bundled with RL-Glue.  The reason for the split was partially to separate the technical details of using RL-Glue with a particular language from the high level overview of what RL-Glue does.
+
+<P>
+This document is the high-level overview document: it contains contains <B>NO</B> implementation specific technical details for writing programs.
+
+<P>
+Please refer to the <A NAME="tex2html1"
+  HREF="http://rl-glue.googlecode.com/svn/trunk/docs/tech_html/index.html">RL-Glue technical manual</A>
+and <A NAME="tex2html2"
+  HREF="http://glue.rl-community.org/Home/Extensions">manuals for specific codecs</A>
+for language specific details on how to implement agents, environments and experiment programs.
+
+<P>
+
+<H2><A NAME="SECTION00022000000000000000">
+How to Use This Document</A>
+</H2>
+
+<P>
+This document has been divided to reflect the purposes described above. To learn about the major components of RL-Glue and a description of how those components interact see Section <A HREF="#RL-Glue">2</A>. To learn how to make environment and agent programs compatible with RL-Glue we recommend sections <A HREF="#envp1">3.1</A> and <A HREF="#agentp1">4.1</A>. Sections <A HREF="#envp1">3.1</A> and <A HREF="#agentp1">4.1</A> describe only the mandatory functions that RL-Glue environments and agents must implement. Sections <A HREF="#envp2">3.2</A> and <A HREF="#agentp2">4.2</A> describe advanced environment and agent functions. To learn about experiment programs and how they interact with RL-Glue see Section <A HREF="#exp">5</A>. For quick function reference see Section <A HREF="#ref">6</A>. Frequently asked questions can be found in Section <A HREF="#faq">8</A>. A summary of and explanations for all changes from RL-Glue 2.X to RL-Glue 3.0 can be found in Section <A HREF="#change">7</A>.
+
+<P>
+RL-Glue uses naming conventions and definitions from Sutton and Barto's text: ``Reinforcement Learning: An Introduction".  This text is available for free online: <TT><A NAME="tex2html3"
+  HREF="http://www.cs.ualberta.ca/~sutton/book/the-book.html">http://www.cs.ualberta.ca/~sutton/book/the-book.html</A></TT>.
+
+<P>
+
+<H1><A NAME="SECTION00030000000000000000"></A>
+<A NAME="RL-Glue"></A>
+<BR>
+RL-Glue Concepts
+</H1>
+A large part of studying and researching reinforcement learning is experimentation. When you write an agent, you should ensure the agent makes exploratory moves to discover more about the world. Similarly, it is important that you are able to ``explore'' new algorithms and ideas without having to create the experiment code for each test. One of the goals of RL-Glue is to simplify and accelerate the process of writing an experiment so that many ideas can be easily tested. 
+
+<P>
+In machine learning research, it is important to look at other work being done in the field, compare your own performance and then improve. One goal for RL-Glue is to provide a consistent tool for using and comparing agents and environments from diverse sources. A common problem for researchers arises when they try compare their work with previously published results.
+
+<P>
+Before RL-Glue, the solution was often to reverse engineer code for the experiment based on the results and (often incomplete) implementation descriptions that had been published.  Even when code was released to the public, it was often still a challenge to understand and adapt the original code. Now, you can make the necessary RL-Glue agent/environment/experiment programs  available to the public such that another experimenter can reproduce your original experiment and easily experiment with their own code to compare performance.  Several recent reinforcement competitions, at <A NAME="tex2html5"
+  HREF="http://rlai.cs.ualberta.ca/RLAI/rlc.html">NIPS</A>
+and <A NAME="tex2html6"
+  HREF="http://rl-competition.org">ICML</A>
+have used RL-Glue for benchmarking participant submissions, further exemplifying the utility of RL-Glue to the research community.
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="fig:glue-connections"></A><A NAME="52"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 1:</STRONG>
+The RL-Glue Standard. Arrows indicate function call direction.</CAPTION>
+<TR><TD>
+<DIV ALIGN="CENTER">
+<IMG
+  WIDTH="427" HEIGHT="237" ALIGN="BOTTOM" BORDER="0"
+ SRC="./glue_connections_no_shadow.png"
+ ALT="Image glue_connections_no_shadow">
+
+</DIV></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+RL-Glue is both a set of ideas and standards, as well as a software implementation. In theory, RL-Glue is a protocol for the reinforcement learning community to follow. Having this very simple standard of necessary functions facilitates the exchange and comparison of agents and environments without limiting their abilities. As software, RL-Glue is functionally a test harness to ``plug in'' agents, environments and experiment programs without having to continually rewrite the connecting code for these pieces. An experiment program is, very simply, code stating how many times to run an agent in an environment and what data should be extracted from this interaction. Provided the agent, environment, and experiment program follow the RL-Glue protocol, by implementing the few necessary functions, they can easily be plugged in with the RL-Glue code to have an experiment running quite effortlessly. Figure <A HREF="#fig:glue-connections">1</A> is a diagram which shows how function calls work in RL-Glue.
+
+<P>
+The Experiment Program contains the ``main function'' which will make all of the requests for information through RL-Glue. These requests are usually related to setting up, starting and running the experiment and then gathering data about the agent's performance. The experiment program can never interact with the agent or environment directly: all contact goes through the RL-Glue interface.  There is also no direct contact between the agent and the environment. Any information the agent or environment returns is passed through RL-Glue to the module which needs it.  
+
+<P>
+
+<H2><A NAME="SECTION00031000000000000000">
+Agents, Environments and Experiment Programs</A>
+</H2>
+Understanding the semantics we ascribe to <I>agents</I>, <I>environments</I>, and <I>experiments</I> is a fundamental part of understanding RL-Glue.
+
+<P>
+In RL-Glue, the <I>agent</I> is both the learning algorithm and the decision maker. The agent decides which action to take at every step.
+
+<P>
+The <I>environment</I> is responsible for storing all the relevant details of the world, or problem of your experiment. The environment generates the observations/states/perceptions that are provided to the agent, and also determines the transition dynamics and rewards.  
+
+<P>
+The <I>experiment</I> is the intermediary which (through RL-Glue) controls all communication between the agent and environment.  This structured separation is by design, division of the agent and environment both helps create modularized code and captures our intuitions about how much the agent and environment should ``know'' about each other.
+
+<P>
+The experiment program will be familiar to anyone who has created reinforcement learning experiments. Akin to the typical main function in many reinforcement learning experiments, an RL-Glue experiment program is a control loop which runs the agent through the environment <B>x</B> number of times, perhaps doing <B>y</B> trials of these <B>x</B> episodes, all the while gathering data about how efficiently the agent has behaved or how quickly it has learned. RL-Glue provides several functions (Section <A HREF="#ref">6</A>) to assist in writing an experiment program.
+
+<P>
+
+<H1><A NAME="SECTION00040000000000000000"></A>
+<A NAME="env"></A>
+<BR>
+RL-Glue Environment Programs
+</H1>
+The environment represents everything outside the agent's direct control. For example, in a tabular grid world, the environment determines the state space, the obstacles, the rewards, start states, termination conditions and the state transitions.  In a robotic task, the environment would also include the robot's body, because the agent does not have complete, deterministic control over its motors. The environment is basically everything that is not the agent.
+
+<P>
+In RL-Glue, the environment is defined by a set of parameterized functions that the RL-Glue interface queries on behalf of the experiment program. These functions define what the environment does before an experiment begins, at the beginning of an episode, on every remaining step of the episode and after the experiment is completed. The following sections describe the basic requirements of an RL-Glue environment and present a complete list of all environment functions.
+
+<P>
+
+<H2><A NAME="SECTION00041000000000000000"></A>
+<A NAME="envp1"></A>
+<BR>
+Essential Components Of A RL-Glue Environment
+</H2>
+
+<P>
+Every RL-Glue environment must implement a number of functions.  The most important functions are <TT>env_start</TT> and <TT>env_step</TT>.   
+
+<P>
+
+<H3><A NAME="SECTION00041100000000000000">
+Observation and Action Encoding</A>
+</H3>
+In RL-Glue, Observations, Actions, and some other types are represented by structures that are any combination of:
+
+<UL>
+<LI>list of discrete numbers (<TT>int</TT>)
+</LI>
+<LI>list of continuous numbers (<TT>double</TT>)
+</LI>
+<LI>list of ASCII characters
+</LI>
+</UL>
+
+<P>
+We have found that most action and observation types can easily be captured with this structure.  In a grid world, for example, the action can be an <TT>int</TT> list of length 1 (with valid values 0-3), corresponding to (N,S,E,W) and the observation can also be an <TT>int</TT> list of length 1 that maps to the agent's current state label (which is also the state of the environment, in this case). In a problem like Mountain Car, the actions are discrete (0-2) and the observation is the car's position and velocity (both real numbers). The action can be an <TT>int</TT> list of length 1 and the observation can be a <TT>double</TT> list of length two. Different implementation languages will use different structures to encode observations and actions: please refer to the codec specific manual for your programming language of  choice for more details.
+
+<P>
+
+<H3><A NAME="SECTION00041200000000000000">
+Environment Start</A>
+</H3>
+The <TT>env_start</TT> function is very simple. The function takes no input and simply returns an observation. The <TT>env_start</TT> function is the first function called at the beginning of an episode; <TT>env_start</TT> chooses the initial state of the environment and returns the corresponding observation. For example, the following pseudocode selects a random start state for a grid world and returns the observation:
+<PRE>
+1. env_start --&gt; observation
+2.      state = rand()*num_states
+3.      set observation equal to state
+4. return observation
+</PRE>
+
+<P>
+
+<H3><A NAME="SECTION00041300000000000000">
+Environment Step</A>
+</H3>
+The other essential piece of a RL-Glue environment is the <TT>env_step</TT> function. The <TT>env_step</TT> function takes an action as input and returns an observation, a reward and a termination flag. In most reinforcement learning problems, the  <TT>env_step</TT> function updates the internal state of the environment, tests for end of episode and returns the new observation of state and current reward. In other words, step function encodes the state transition and reward functions. Keeping with the grid world example, the following would be a valid <TT>env_step</TT> function:
+<PRE>
+1. env_step(action) --&gt; reward, observation, flag 
+2.      newState = updateState(action, state)
+3.      flag = isTerminal(newState)
+3.      reward = calculate reward for newState
+4.      set observation equal to newState
+5.      state = newState
+6. return reward, observation, flag
+</PRE>
+Here we assume the existence of a state update function and an isTerminal function that checks if the current state is a terminal state.
+
+<P>
+So thats it. Just fill in two functions and you have a valid RL-Glue environment. In later sections we will discuss advanced environment functions and how these additional functions can be used to write more complex experiment programs. 
+
+<P>
+
+<H2><A NAME="SECTION00042000000000000000"></A>
+<A NAME="envp2"></A>
+<BR>
+Additional Components Of A RL-Glue Environment
+</H2>
+
+<P>
+So far we have only scratched the surface of what you can do with RL-Glue environments. Additional environment functions can be used to initialize data structures and flexibly communicate with the environment from the experiment through ascii messages.
+
+<P>
+
+<H3><A NAME="SECTION00042100000000000000"></A>
+<A NAME="task"></A>
+<BR>
+Task Specification Language (<TT>task_spec</TT>)
+</H3>
+In an effort to provide the agent writer with simple and concise information about the environment, some information, called the <TT>task_spec</TT>, is provided by the environment for the agent.  The <TT>task_spec</TT> encodes information about the structure of the observations, actions, and rewards. The environment's init function (<TT>env_init</TT>) encodes this information as an ASCII string. The string is then passed to the agent's init function (<TT>agent_init</TT>).  This information can also be used to check if an agent and environment pair are compatible. The agent is responsible for parsing any relevant information out of the <TT>task_spec</TT> in the <TT>agent_init</TT>  function. 
+
+<P>
+More specifically, the <TT>task_spec</TT> string encodes a version number, the number of observation and action dimensions, the types of observations and actions, the ranges of the observations and actions and the min and max reward values. 
+
+<P>
+The <TT>task_spec</TT> is constantly evolving to match the state-of-art of learning algorithms and tasks being solved in reinforcement learning research; we expect that the <TT>task_spec</TT> will evolve much faster than the main RL-Glue protocol.  To prevent this document from becoming quickly outdated, we have separated the <TT>task_spec</TT> documentation from the main RL-Glue documentation. Please see the <A NAME="tex2html7"
+  HREF="http://glue.rl-community.org/Home/rl-glue/task-spec-language">online <TT>task_spec</TT> documentation</A>
+for details about different <TT>task_spec</TT> versions.
+
+<P>
+
+<H3><A NAME="SECTION00042200000000000000">
+Environment Initialization and Cleanup</A>
+</H3>        
+Most environments need to store an internal state representation and therefore many environment programs you write will need to allocate and deallocate data structures at the beginning and end of a learning experiment. The <TT>env_init</TT> function allocates any global data structures and variables that will be accessed by the start and step functions. For example, the <TT>env_init</TT> functions might initialize the tabular state variable to zero and allocate a <I>numStates X numStates</I> state transition array. The <TT>env_init</TT> function can optionally define a <TT>task_spec</TT> string. The <TT>env_init</TT> function must return a string, but it may return an empty string if the <TT>task_spec</TT> is not required for your experiment.
+
+<P>
+The <TT>env_cleanup</TT> function usually deallocates or frees anything allocated in <TT>env_init</TT>.
+
+<P>
+
+<H3><A NAME="SECTION00042300000000000000">
+Environment Message</A>
+</H3>
+Once in a while you will find yourself wishing for the ability to add custom environment functions to RL-Glue that can be called by your experiment program. The <TT>env_message</TT> function allows you to basically add your own functionality to the RL-Glue spec. You can send a string message to the environment and it can respond with a string. For example: you could make random starting states a parameter of your environment by using a message to toggle that property:
+<PRE>
+1. env_message(inMessage) --&gt; outMessage
+2.      if inMessage == "turnOffRandomStarts"  
+3.           randStarts = false
+4.      end 
+5.      if inMessage == "turnOnRandomStarts"  
+6.           randStarts = true
+7.      end 
+8. return ""
+</PRE>
+
+<P>
+
+<H1><A NAME="SECTION00050000000000000000"></A>
+<A NAME="agent"></A>
+<BR>
+RL-Glue Agent Programs
+</H1>
+An RL-Glue agent can be as simple as a program the returns a random number on every step or a more advanced algorithm that learns a model of the reward and transition functions of the environment while maximizing reward. The agent program is a decision maker first and foremost: it must return an action when queried by RL-Glue. Many RL-Glue agents, however, learn the best action by learning from the sequence of observations, actions and rewards during an episode. Agent programs, like environments, are completely defined by a set of functions you must implement. RL-Glue calls these agent functions during an experiment, as directed by the experiment program. Whether you are writing a random agent or a learning agent you usually only need  to implement a few functions. This section covers the basic requirements of an RL-Glue agent and describes a number of optional agent functions.
+
+<H2><A NAME="SECTION00051000000000000000"></A>
+<A NAME="agentp1"></A>
+<BR>
+Essential Components Of A RL-Glue Agent
+</H2>
+
+<P>
+An agent program is fully compatible with RL-Glue if it initializes the action type and implements three functions: <TT>agent_start</TT>, <TT>agent_step</TT> and <TT>agent_end</TT>. 
+
+<P>
+
+<H3><A NAME="SECTION00051100000000000000">
+Action Types</A>
+</H3>
+The primary agent functions take some combination of observations and rewards as input and return actions. The observations and rewards are created by the environment, so the agent program needs to only read their values. The actions, however, must be defined by the agent. Actions can be any combination of a list of <TT>int</TT>, <TT>double</TT>, and <TT>character</TT> values.
+
+<P>
+
+<H3><A NAME="SECTION00051200000000000000">
+Agent Start</A>
+</H3>
+The <TT>agent_start</TT> function selects the first action at the beginning of an episode based on the first observation from the environment. The <TT>agent_start</TT> function does not receive a reward as input; <TT>agent_start</TT> usually contains no learning update code. For example, the following function selects the first action based on the current value function estimate:
+<PRE>
+1. agent_start (observation) --&gt; action
+2.      lastObservation=observation
+3.      for each action a
+4.           if highest valued action valueFunction(observation,a)
+5.           then store a as lastAction
+6. return lastAction
+</PRE>
+
+<P>
+
+<H3><A NAME="SECTION00051300000000000000">
+Agent Step</A>
+</H3>
+The <TT>agent_step</TT> function encodes the heart of the agent's learning algorithm and action selection mechanism. At a minimum the step function must return an action every time it is called. In most learning agents, the step function queries the agent's action selection function and performs a learning update based on the input observation and reward. The following <TT>agent_step</TT> function shows pseudocode for a value update:
+<PRE>
+1. agent_step(reward, observation)-&gt; action
+2.      update(valueFunction, lastObservation, lastAction, reward, observation)
+3.      newAction = select_action(observation, valueFunction)
+4.      lastObservation = observation
+5.      lastAction = newAction
+6. return newAction
+</PRE>  
+Notice that the agent program must explicitly store the observation and action from the previous time step. RL-Glue does not make the history of actions, observations and rewards available to the agent or environment.
+
+<P>
+
+<H3><A NAME="SECTION00051400000000000000">
+Agent End</A>
+</H3>
+In an episodic task, the environment enters a terminal state that ends the episode. RL-Glue responds to the end of an episode by calling the <TT>agent_end</TT> function, passing the reward produced on the last transition to the agent and signaling the end of the current episode. The <TT>agent_end</TT> function usually performs a final learning update based on the last transition and also performs any other end-of-episode routines, such as clearing eligibility traces. If the environment is non-episodic RL-Glue will never call <TT>agent_end</TT>.
+
+<P>
+Continuing with the SARSA example:
+<PRE>
+1. agent_end (reward) 
+2.      update(valueFunction, lastObservation, lastAction, reward)
+</PRE>
+
+<P>
+The <TT>agent_end</TT> function does not receive the final observation from the environment. In many learning problems this is of no consequence because the agent does not make a decision in the terminal state. If, however, the agent were learning a model of the environment, information about the final transition would be important. In this case, it is recommended that the environment be augmented with a terminal state that has a reward of zero on the transition into it. This choice was made to keep the RL-Glue interface as minimal and light-weight as possible. 
+
+<P>
+
+<H2><A NAME="SECTION00052000000000000000"></A>
+<A NAME="agentp2"></A>
+<BR>
+Additional Components Of A RL-Glue Agent
+</H2>
+You now can construct a basic RL-Glue agent. RL-Glue agents, like environments, can be made more useful with the addition of a few optional agent functions. This section describes how to use initialization, cleanup and generic message functions.
+
+<P>
+
+<H3><A NAME="SECTION00052100000000000000">
+Agent Initialization and Cleanup</A>
+</H3>
+Agent programs, like environments, often need to allocate and free various data structures. The <TT>agent_init</TT>  and <TT>agent_cleanup</TT> functions are called at the beginning and end of a learning experiment, respectively. The <TT>agent_init</TT>  function receives the <TT>task_spec</TT> string as input. The <TT>agent_init</TT>  function usually parses the <TT>task_spec</TT> and stores various information encoded in the string. For example, after parsing the <TT>task_spec</TT>, the <TT>agent_init</TT>  function can then initialize the value function array to the size state space using the number of states from the <TT>task_spec</TT>. Remember the <TT>task_spec</TT> is not required and could just be an empty string.      
+
+<P>
+
+<H3><A NAME="SECTION00052200000000000000">
+Agent Message</A>
+</H3>
+The <TT>agent_message</TT> function is used to send an arbitrary string message to the agent program. This function can be used to change agent parameters, notify the agent that the exploration phase is over, and request the name of the agent program, for example.  People have created whole protocols that use <TT>agent_message</TT> to set agent learning parameters, query their value functions, and more.
+
+<P>
+Here is a quick example of how you could query the current values of some parameters of an agent:
+<PRE>
+agent_message(inMessage) --&gt; outMessage
+      if inMessage == "getCurrentStepSize"  
+           return alpha
+      end 
+      if inMessage == "getCurrentExplorationRate"  
+           return epsilon
+      end 
+ return ""
+</PRE>
+
+<P>
+
+<H1><A NAME="SECTION00060000000000000000"></A>
+<A NAME="exp"></A>
+<BR>
+RL-Glue Experiment Programs
+</H1>
+Usually the shortest and easiest part of writing your first learning experiment is writing the experiment program. The experiment program has no interface to implement and is mostly comprised of calls to the already existing RL-Glue functions. The experiment program has four main duties: a) start the experiment b) specify the sequence of agent-environment interactions (steps) c) extract and analyze experimental data d) end the experiment and clean up.  Only the RL-Glue interface functions can be called by the experiment program. No agent or environment functions can be directly accessed by the experiment program.
+
+<P>
+
+<H2><A NAME="SECTION00061000000000000000"></A>
+<A NAME="expp1"></A>
+<BR>
+Basic Experiment Programs
+</H2>
+
+<P>
+At a minimum the experiment program must call <TT>RL_init</TT> and <TT>RL_cleanup</TT> and execute several time steps of agent-environment interaction. The following pseudo code represents a simple experiment program.
+<PRE>
+1. RL_init()
+2. RL_start()
+3. steps=0
+4. terminal=false 
+5. while steps &lt; 100 and not terminal
+6.     terminal,reward,observation,action = RL_step()
+7.     steps=steps+1
+8. RL_cleanup()
+</PRE>
+This experiment program initializes the agent and environment (<TT>RL_init</TT>), calls the start functions of the agent and environment (<TT>RL_start</TT>) and then executes a 100 or less step episode. 
+
+<P>
+The <TT>RL_step</TT> function calls the <TT>env_step</TT> function passing it the most recent agent action (in this case from <TT>agent_start</TT>). The <TT>env_step</TT> function returns the new observation, reward and terminal flag. If the flag <B>is not</B> set the <TT>agent_step</TT> function is called with the new observation and reward as input arguments. The action returned by <TT>agent_step</TT> is stored by RL-Glue until the next call to RL_step. If the flag <B>is</B> set, the <TT>agent_end</TT> function is called with the reward as input. This process continues until either the flag is set or 100 steps are completed. 
+
+<P>
+Using the <TT>RL_step</TT> function gives the experiment designer access to all the data produced during an episode; however, it is often more convenient to use the <TT>RL_episode</TT> function when step-level control is not needed. Lines 5 through 7, in the above experiment program, can be replaced by a single call to RL_episode(100). If the input to <TT>RL_episode</TT> is zero, control will return to the experiment program if and only if the environment enters a terminal state (i.e., terminal flag from the <TT>env_step</TT> function is set to true).
+
+<P>
+The <TT>RL_step</TT> function allows the experiment program to record/sum/average the reward at each step, but the <TT>RL_episode</TT> function runs many (perhaps millions of) steps before returning control to the experiment program. The <TT>RL_return</TT> and <TT>RL_num_steps</TT> functions allow the experiment program to retrieve the cumulative reward and the number of steps used during the episode. Specifically, <TT>RL_return</TT> returns the sum of rewards accumulated during the current or most recently completed episode (it is reset to zero at the start of every episode). The <TT>RL_num_steps</TT> returns the number of steps elapsed during the current or most recently completed episode (also reset to zero). The function reference in Section <A HREF="#ref">6</A> provides pseudo code for each of the RL-Glue interface functions.
+
+<P>
+Putting these new functions together we can write a more useful experiment program:
+<PRE>
+1. RL_init()
+2. theReturn = 0
+3. for 1...100
+4.      RL_episode(1000)
+5.      theReturn += RL_return()
+6. Print theReturn/100
+7. RL_cleanup()
+</PRE>
+The above experiment program runs 100 episodes, each with max length 1000, and computes the average cumulative reward per episode.
+
+<P>
+
+<H2><A NAME="SECTION00062000000000000000"></A>
+<A NAME="expp2"></A>
+<BR>
+Advanced Experiment Programs
+</H2>
+
+<P>
+
+<H3><A NAME="SECTION00062100000000000000">
+Training/Testing Phase Experiment</A>
+</H3>
+We can now produce more advanced experiment programs that might be used in typical reinforcement learning research:
+<PRE>
+1. RL_init()
+2. numSteps = 0
+3. for 1...1000
+4.      RL_episode(1000)
+5. RL_agent_message("freezeAgentPolicy")
+6. for 1...100
+7.      RL_episode(1000)
+8.      numSteps += RL_num_steps()
+9.  Print numSteps/100
+10. RL_cleanup()
+</PRE>
+
+<P>
+This experiment program has two phases. During the exploration phase (lines 3-5) the agent is allowed to interact with the environment without any penalty: the experiment does not measure the reward or number of steps taken during the exploration phase. The experiment program then informs the agent that the training phase is over (line 5). The agent then (presumably) stops learning so its policy can be evaluated on the same environment for 100 episodes (lines 6-8). The evaluation phase records the agents performance by measuring the average number of steps the agent takes during each episode. Many results in the reinforcement learning literature are collected in a similar fashion.
+
+<P>
+Feel free to combine, mix and match the various RL-Glue interface functions. You will find that, these functions allow you to write powerful experiment programs that are easy to read and understand. 
+
+<P>
+
+<H1><A NAME="SECTION00070000000000000000"></A>
+<A NAME="ref"></A>
+<BR>
+Command and Function Reference
+</H1>
+Once you are comfortable with the basics and you have written a few agents and environments you may often find yourself wondering ``I need to do <B>X</B>, what function should I use?''. You may also wonder what is the ``intended purpose'' of a particular RL-Glue function, when you are reviewing someone else's agent or environment code. This section provides a complete listing of all agent, environment and RL-Glue interface functions for quick reference.
+
+<H2><A NAME="SECTION00071000000000000000">
+Agent Functions</A>
+</H2>
+
+<P>
+Every agent must implement all of the following routines. Note these functions are only accessed by the RL-Glue. Experiment programs should not try to bypass the Glue to directly call these functions.
+
+<P>
+<PRE>
+     agent_init(task_specification)
+</PRE>     
+This function will be called first, even before <TT>agent_start</TT>. The <TT>task_spec</TT> is a description of important experiment information, including but not exclusive to a description of the state and action space. The RL-Glue standard for writing <TT>task_spec</TT> strings is found <A NAME="tex2html8"
+  HREF="http://glue.rl-community.org/Home/rl-glue/task-spec-language">here</A>.  In <TT>agent_init</TT> , information about the environment is extracted from the <TT>task_spec</TT> and then used to set up any necessary resources (for example, initialize the value function).
+
+<P>
+<PRE>
+     agent_start(first_observation) --&gt; first_action
+</PRE>
+Given the first_observation (the observation of the agent in the start state) the agent must then return the action it wishes to perform. This is called once if the task is continuing, else it happens at the beginning of each episode.
+
+<P>
+<PRE>
+     agent_step(reward, observation) --&gt; action
+</PRE>
+This is the most important function of the agent. Given the reward garnered by the agent's previous action and the resulting observation, choose the next action to take. Any learning (policy improvement) should be done through this function.
+
+<P>
+<PRE>
+     agent_end(reward)
+</PRE>     
+If the agent is in an episodic environment, this function will be called after the terminal state is entered. This allows for any final learning updates. If the episode is terminated prematurely (i.e., <TT>RL_episode</TT> cutoff before entering a terminal state) <TT>agent_end</TT> is NOT called.
+
+<P>
+<PRE>
+     agent_cleanup()
+</PRE>     
+This function is called at the end of a run/trial and can be used to free any resources which may have been allocated in <TT>agent_init</TT> . Calls to agent_cleanup should be in a one to one ratio with the calls to <TT>agent_init</TT> .
+
+<P>
+<PRE>
+     agent_message(input_message) --&gt; output_message
+</PRE>     
+The <TT>agent_message</TT> function is a jack of all trades and master of none. Having no particular functionality, it is up to the user to determine what <TT>agent_message</TT> should implement. If there is any information which needs to be passed in or out of the agent, this message should do it. For example, if it is desirable that an agent's learning parameters be tweaked mid experiment, the author could establish an input string that triggers this action. Likewise, if the author wished to extract a representation of the value function, they could establish an input string which would cause <TT>agent_message</TT> to return the desired information.
+
+<P>
+NOTE: Unlike the other functions, <TT>agent_message</TT> can be called at any time: including before <TT>agent_init</TT> and after <TT>agent_cleanup</TT>.
+
+<P>
+
+<H2><A NAME="SECTION00072000000000000000"></A>
+<A NAME="Eref"></A>
+<BR>
+Environment Functions
+</H2>
+Every environment must implement all of the following routines. Note these functions are only accessed by the RL-Glue. Experiment programs should not try to bypass the Glue and directly call these functions.
+<PRE>
+     env_init() --&gt; task_specification
+</PRE>
+This routine will be called exactly once for each trial/run. This function is an ideal place to initialize all environment information and allocate any resources required to represent the environment. It must return a <TT>task_spec</TT> which adheres to the <TT>task_spec</TT> language. A <TT>task_spec</TT> stores information regarding the observation and action space, as well as whether the task is episodic or continuous.
+
+<P>
+<PRE>
+     env_start() --&gt; first_observation
+</PRE>
+For a continuing task this is done once. For an episodic task, this is done at the beginning of each episode. <TT>env_start</TT> assembles a first_observation given the agent is in the start state. Note the start state cannot also be a terminal state.
+
+<P>
+<PRE>
+     env_step(action) --&gt; reward, observation, terminal
+</PRE>
+Complete one step in the environment. Take the action passed in and determine what the reward and next state are for that transition.
+
+<P>
+<PRE>                 
+     env_cleanup()
+</PRE>
+This can be used to release any allocated resources. It will be called once for every call to <TT>env_init</TT>.
+
+<P>
+<PRE>
+     env_message(input_string) --&gt; output_string
+</PRE>
+Similar to <TT>agent_message</TT>, this function allows for any message passing to the environment required by the experiment program. This may be used to modify the environment mid experiment. Any information that needs to passed in or out of the environment can be handled by this function.
+
+<P>
+NOTE: Unlike the other functions, <TT>env_message</TT> can be called at any time: including before <TT>env_init</TT> and after <TT>env_cleanup</TT>.
+
+<P>
+
+<H2><A NAME="SECTION00073000000000000000">
+Interface Routines Provided by the RL-Glue</A>
+</H2>
+
+<P>
+The following built-in RL-Glue functions are provided primarily for the use of the experiment program writers. Using these functions, the experiment program gains access to the corresponding environment and agent functions. The implementation of these routines are to be standard across all RL-Glue users. To ensure agents/environments/experiment programs can be exchanged between authors with no changes necessary, users should not change the RL-Glue interface code provided.
+
+<P>
+To understand the following, it is helpful to think of an episode as consisting of sequences of observations, actions, and rewards that are indexed by time-step as follows:
+<PRE>
+     o0, a0,  r1, o1, a1,  r2, o2, a2, ..., rT, terminal_observation
+</PRE>
+where the episode lasts T time steps (T may be infinite) and terminal_observation is a special, designated observation signaling the end of the episode.
+
+<P>
+<PRE>
+RL_init() --&gt; task_specification
+     agent_init(env_init())
+</PRE>
+This initializes everything, passing the environment's <TT>task_spec</TT> to the agent. This should be called at the beginning of every trial.
+<PRE>
+RL_start() --&gt; o0, a0
+     o = env_start()
+     a = agent_start(o)
+     nextAction = a
+return o,a
+</PRE>
+
+<P>
+Do the first step of a run or episode.  The action is saved in <TT>nextAction</TT> so that it can be used on the next step.
+<PRE>
+RL_step() --&gt; rt, ot, terminal, at
+     r,o,terminal = env_step(nextAction)
+     if terminal == true
+           agent_end(r)
+           return r, o,terminal
+     else
+           a = agent_step(r, o)
+           nextAction = a
+     return r, o, terminal, a
+</PRE>
+Take one step.  <TT>RL_step</TT> uses the saved action and saves the returned action for the next step.  The action returned from one call must be used in the next, so it is better to handle this implicitly so that the user doesn't have to keep track of the action.  If the end-of-episode observation occurs, then no action is returned.
+
+<P>
+<PRE>
+RL_episode(steps) --&gt; terminal
+     num_steps = 0
+     o, a = RL_start()
+     num_steps = num_steps + 1
+     list = [o, a]
+     while o != terminal_observation
+           if(steps !=0 and num_steps &gt;= steps)
+                return 0
+           else
+                r, o, a = RL_step()
+                list = list + [r, o, a]
+                num_steps = num_steps + 1
+           
+     agent_end(r)
+	return 1
+</PRE>
+
+<P>
+Do one episode until a termination observation occurs or until steps steps have elapsed, whichever comes first.  As you might imagine, this is done by calling RL_start, then <TT>RL_step</TT> until the terminal observation occurs.  If steps is set to 0, it is taken to be the case where there is no limitation on the number of steps taken and <TT>RL_episode</TT> will continue until a termination observation occurs. If no terminal observation is reached before num_steps is reached, the agent does not call agent_end, it simply stops.
+<PRE>
+     RL_return() --&gt; return
+</PRE>
+Return the cumulative total reward of the current or just completed episode.  The collection of all the rewards received in an episode (the return) is done within <TT>RL_return</TT>; however, any discounting of rewards must be done inside the environment or agent.
+<PRE>
+     RL_num_steps() --&gt; num_steps
+</PRE>
+Return the number of steps elapsed in the current or just completed episode.
+<PRE>
+     RL_cleanup()
+          env_cleanup()
+          agent_cleanup()
+</PRE>
+Provides an opportunity to reclaim resources allocated by RL_init.
+
+<P>
+<PRE>
+     RL_agent_message(input_message_string) --&gt; output_message_string
+          return agent_message(input_message_string)
+</PRE>
+This message passes the input string to the agent and returns the reply string given by the agent. See <TT>agent_message</TT> for more details.                
+<PRE>
+     RL_env_message(input_message_string) --&gt; output_message_string
+          return env_message(input_message_string)
+</PRE>
+This message passes the input string to the environment and returns the reply string given by the environment. See <TT>env_message</TT> for more details. 
+
+<P>
+
+<H1><A NAME="SECTION00080000000000000000"></A>
+<A NAME="change"></A>
+<BR>
+Changes from RL-Glue 2.x
+</H1>
+Version 3.0 of RL-Glue represents a large series of updates with the intention of bringing RL-Glue from a University of Alberta side project to an open source project generally useful to the global
+reinforcement learning community.  As part of that process, we made some pretty big changes.
+
+<P>
+
+<H2><A NAME="SECTION00081000000000000000">
+The Codec Split</A>
+</H2>
+The codecs (including the C/C++ codec) have been split from the main RL-Glue project.  Each codec package is now more independent, and they each may offer something different to the user.  However, as always, they layer on RL-Glue.  The root page for all of the codecs is:
+<BR>
+<A NAME="tex2html9"
+  HREF="http://glue.rl-community.org/Home/Extensions">http://glue.rl-community.org/Home/Extensions</A>
+<P>
+As usual, you don't need to change your code depending on how it will be used.  The code for an agent, environment, or experiment is identical no matter if you will run it using sockets or directly compiled together.  The only difference is what library you link against.
+
+<P>
+
+<H3><A NAME="SECTION00081100000000000000">
+RL-Glue Project</A>
+</H3>
+The idea of the RL-Glue project is that it will very very rarely change.  We've made most of the changes on our wishlist, so RL-Glue can become a library that is standard and reliable for doing reinforcement learning experiments.  The goal is that it is always there, and it always just works.
+
+<P>
+This project is written entirely in C and can be linked from C or C++ code.
+
+<P>
+When you download and install the RL-Glue project, you get a few artifacts:
+<DL>
+<DT><STRONG>rl_glue executable socket server</STRONG></DT>
+<DD>The server for running socket-based experiments.
+	
+</DD>
+<DT><STRONG>librlglue</STRONG></DT>
+<DD>A C library that can be linked against for creating executables where the agent, environment, and experiment program are all written in C or C++. These experiments have virtually no rl-glue calling overhead.
+	
+</DD>
+<DT><STRONG>librlgluenetdev</STRONG></DT>
+<DD>A C library that includes the network code that is used by the rl_glue socket server.  This code is re-used by the C/C++ network codec and by other custom codecs such as the Atari project.
+	
+</DD>
+<DT><STRONG>librlutils</STRONG></DT>
+<DD>A C library that provides implementations for some handy utility functions.  This code is expected to be re-used by most C/C++ agents and environments, either direct-compile or through the C/C++ network codec.
+	
+</DD>
+<DT><STRONG>Agent/Environment/Experiment Headers</STRONG></DT>
+<DD>Four header files: RL_glue.h Agent_common.h, Environment_common.h, and RL_common.h. 
+</DD>
+</DL>
+
+<P>
+The way that they should be included in your agents/environments/experiments is like this:
+<PRE>
+&lt;rlglue/RL_common.h&gt;            /* Data structures                                     */
+&lt;rlglue/RL_glue.h&gt;              /* (RL_) functions for experiments (includes RL_common)                                 */
+&lt;rlglue/Agent_common.h&gt;         /* Agent (agent_) functions (includes RL_common)      */
+&lt;rlglue/Environment_common.h&gt;   /* Environment (env_) functions (includes RL_common)  */
+&lt;rlglue/utils/C/RLStruct_util.h&gt;/* Handy utility functions for copying/initing structs*/
+&lt;rlglue/utils/C/TaskSpec_Parser.h&gt;/* Task Spec Parser fuctions*/
+</PRE> 
+
+<P>
+Generally, each of agent/env/experiment should only have to include one of the glue or common files.  You'll probably never include RL_common.h, but it is needed by the others.
+
+<P>
+
+<H3><A NAME="SECTION00081200000000000000">
+RL-Glue-Extensions Project :: C/C++ Codec</A>
+</H3>
+The <A NAME="tex2html10"
+  HREF="http://glue.rl-community.org/Home/Extensions/c-c-codec">C/C++ codec</A>
+gives you libraries that can be used to build stand-alone socket-based agents, environment, and experiments.  The C Codec is in the rl-glue-ext project and is expected to change more frequently than the main RL-Glue project.
+
+<P>
+This project is written entirely in C and can be linked from C or C++ code.
+
+<P>
+The artifacts of the C Codec are:
+<DL>
+<DT><STRONG>librlagent</STRONG></DT>
+<DD>Library give agents what they need to connect to the rl_glue executable server over sockets.
+	
+</DD>
+<DT><STRONG>librlenvironment</STRONG></DT>
+<DD>Library give environments what they need to connect to the rl_glue executable server over sockets.
+	
+</DD>
+<DT><STRONG>librlexperiment</STRONG></DT>
+<DD>Library give experiments what they need to connect to the rl_glue executable server over sockets.
+</DD>
+</DL>
+
+<P>
+
+<H2><A NAME="SECTION00082000000000000000">
+Build Changes</A>
+</H2>
+We're not manually writing Makefiles anymore!  We've moved both RL-Glue and the C/C++ Codec to a <A NAME="tex2html11"
+  HREF="http://www.gnu.org/software/autoconf/">GNU autotools system</A>. Check the appropriate technical manual for details.
+
+<P>
+
+<H2><A NAME="SECTION00083000000000000000">
+API Changes</A>
+</H2>
+All of the API changes have been included in all of the codecs.
+
+<P>
+
+<H3><A NAME="SECTION00083100000000000000">
+RL_Freeze and Agent_Freeze</A>
+</H3>
+The freeze function were the first in a long series of ``special'' functions that some people wanted RL-Glue to support.  The long term solution to special methods is the messaging system, <TT>RL_agent_message</TT> and RL_env_message. With the messaging system you can create any protocol you want between your experiment and agent or experiment and environment.
+
+<P>
+So, to reduce the clutter and kruft (cruft?) of the API, we've removed Freeze.  How do you unfreeze anyways?
+
+<P>
+
+<H3><A NAME="SECTION00083200000000000000">
+RL_set/get_random_seed/state</A>
+</H3>
+These functions have existed to control randomization and initialization of environments for a long time.  To this point, exactly how they were to be used was never standardized, and it felt like the right time to remove them and streamline the interface.  They have been removed.  We expect them to re-surface with specific use cases in a future optional <TT>RL_env_message</TT> message protocol.
+
+<P>
+
+<H3><A NAME="SECTION00083300000000000000">
+RL_episode</A>
+</H3>
+Csaba Szepesvari made the request at some point that <TT>RL_episode</TT> should let you know whether it ended because the time step limit expired, or because the episode ended normally.  We now return the value of the terminal flag from the last <TT>env_step</TT> of the episode. If the flag is set to 1, then the episode terminated normally; if not, the timeout ended the episode.  
+
+<P>
+
+<H3><A NAME="SECTION00083400000000000000">
+RL_init</A>
+</H3>
+It made sense to us that <TT>RL_init</TT> should return the task spec, in case the experiment program wants to know it, make a note of it, etc. The RL_glue specification has now been updated to handle this.
+
+<P>
+
+<H2><A NAME="SECTION00084000000000000000">
+Type Changes</A>
+</H2>
+The main RL-Glue C/C++ code and the codecs have each undergone different changes to the types and their naming.
+Please refer to the specific technical manual for the language of interest for all the details.
+
+<P>
+
+<H3><A NAME="SECTION00084100000000000000">
+charArray!</A>
+</H3>
+Some people have found the interface of abstract types that are arrays of <TT>double</TT> and <TT>int</TT> a little bit too restrictive.  We've added a third array, this time of <TT>char</TT>.  Now people can push strings and char arrays of anything they want through observations and actions.
+
+<P>
+The rl_abstract_type_t now looks like:
+<PRE>
+typedef struct
+{
+    unsigned int numInts;
+    unsigned int numDoubles;
+    unsigned int numChars;
+    int* intArray;
+    double* doubleArray;
+    char* charArray;
+} rl_abstract_type_t;
+</PRE>
+
+<P>
+Keep in mind that charArray is an array of characters.  It is not necessarily null terminated.  We don't enforce null termination. Remember, 3 chars takes up 3 array spots, but ``123'' takes up 4 (`<IMG
+ WIDTH="13" HEIGHT="35" ALIGN="MIDDLE" BORDER="0"
+ SRC="img1.png"
+ ALT="$\backslash$">0' at the end).
+
+<P>
+If you do the following, bad things will probably happen if the char array is not null terminated:
+<PRE>
+	printf("My char array is %s\n",observation.charArray);
+</PRE>
+
+<P>
+
+<H1><A NAME="SECTION00090000000000000000"></A>
+<A NAME="faq"></A>
+<BR>
+Frequently Asked Questions
+</H1>
+
+<H2><A NAME="SECTION00091000000000000000">
+Where can I get more help?</A>
+</H2>
+
+<H3><A NAME="SECTION00091100000000000000">
+Online FAQ</A>
+</H3>
+We suggest checking out the online RL-Glue C/C++ Codec FAQ:
+<BR>
+<TT><A NAME="tex2html12"
+  HREF="http://glue.rl-community.org/Home/rl-glue#TOC-Frequently-Asked-Questions">http://glue.rl-community.org/Home/rl-glue#TOC-Frequently-Asked-Questions</A></TT>
+<P>
+The online FAQ may be more current than this document, which may have been distributed some time ago.
+
+<P>
+
+<H3><A NAME="SECTION00091200000000000000">
+Google Group / Mailing List</A>
+</H3>
+First, you should join the RL-Glue Google Group Mailing List:
+<BR>
+<TT><A NAME="tex2html13"
+  HREF="http://groups.google.com/group/rl-glue">http://groups.google.com/group/rl-glue</A></TT>
+<P>
+We're happy to answer any questions about RL-Glue.  Of course, try to search through previous messages first in case your question has been answered before.
+
+<P>
+
+<H2><A NAME="SECTION00092000000000000000">
+Can I write my agents in &lt; insert language here &gt;</A>
+</H2>
+Yes! Maybe.  Writing agents/environments/experiments in different languages require there to be a codec for that language.  As of writing, there are codecs for C/C++, Java, Matlab, Python, and Lisp.  Check out the codecs project for more information:
+<BR>
+<TT><A NAME="tex2html14"
+  HREF="http://glue.rl-community.org/Home/Extensions">http://glue.rl-community.org/Home/Extensions</A></TT>
+<P>
+
+<H2><A NAME="SECTION00093000000000000000">
+Does RL-Glue support multi-agent reinforcement learning?</A>
+</H2>
+ No. RL-Glue is designed for single agent reinforcement learning. At present we are not planning a multi-agent extension of RL-Glue. We envision that this would be a separate project with a different audience and different objectives.  However, more recently some very reasonable proposals have been put forward, so you never know.  Let us know what you think in the RL-Glue Google group:
+<BR>
+<TT><A NAME="tex2html15"
+  HREF="http://groups.google.com/group/rl-glue">http://groups.google.com/group/rl-glue</A></TT>
+<P>
+
+<H2><A NAME="SECTION00094000000000000000">
+Why isn't the RL-Glue interface object oriented?</A>
+</H2>
+RL-Glue is meant to be a low level protocol for connecting agents, environments, and experiments.  These interactions can
+easily be described by the simple, flat, functions calls of RL-Glue.  We don't feel that it is useful to overcomplicate
+things in that respect.
+
+<P>
+However, there is no reason that an implementation of an agent or environment shouldn't be designed using an object-oriented 
+approach.  In fact, many of the contributors to this project have their own object-oriented libraries of agents that 
+they use with RL-Glue.
+
+<P>
+Some might argue that it makes sense to create a C/C++ or Java codec that supports an OO design
+directly.  This would not be hard, it's just a matter of someone interested picking up the project and doing it.  Personally, 
+we've found it easy enough to write a small bridge between the existing codecs and our personal OO hierarchies.
+
+<P>
+
+<H2><A NAME="SECTION00095000000000000000">
+What does Observation mean? Why does the RL-Glue not pass around ``states''?</A>
+</H2>
+If the state of an environment is fully observable, then you can often use the terms <I>state</I> and <I>observation</I> interchangeably. However, 
+observation is a more  general term that is meant to mean the <I>perceptions</I> that the agent receives.  This can be different 
+from the concept of <I>state</I>, which corresponds to some <I>truth</I> about the environment.  For example, in partially observable environments, the observations
+may be <I>aliased</I>: the environment may be in different states, but the agent receives the same observation. 
+
+<P>
+
+<H2><A NAME="SECTION00096000000000000000">
+Where is the ``environmental state" stored in RL-Glue? In other systems, such as CLSquare, the old state is passed to the environment step function.</A>
+</H2>
+The environment in RL-Glue is responsible for keeping  track of the current ``state'' and computing the next ``state'' given an action. The old state does not need to be passed
+outside of the environment, the state stays within the  environment. The <TT>next_state</TT> method in CLSquare is basically the same as <TT>env_step</TT> in RL-Glue.
+
+<P>
+
+<H2><A NAME="SECTION00097000000000000000">
+Can RL-Glue handle sampling the same trajectory a number of times consecutively?</A>
+</H2>
+This behavior can be achieved by clever crafting of messages between the agent, environment, and experiment programs.  We do not have a working example because nobody has ever seriously approached us about using RL-Glue in this way.  Contact us if you are interested.
+
+<P>
+
+<H2><A NAME="SECTION00098000000000000000">
+Why is there no RL_freeze, RL_unfreeze or RL_frozen?</A>
+</H2>
+The functionality of Freeze can easily be replicated through <TT>RL_agent_message</TT> and <TT>agent_message</TT>.  There are literally a hundred similar methods that would 
+be desirable to one person or another. To avoid the RL-Glue interface becoming bloated, we are trying to avoid adding too many redundant functions for the sake of convenience.
+
+<P>
+
+<H1><A NAME="SECTION000100000000000000000">
+Document Information</A>
+</H1>
+<PRE>
+Revision Number: $Rev: 962 $
+Last Updated By: $Author: brian@tannerpages.com $
+Last Updated   : $Date: 2009-02-03 19:11:22 -0700 (Tue, 03 Feb 2009) $
+$URL: https://rl-glue.googlecode.com/svn/trunk/docs/Glue-Overview.tex $
+</PRE>
+<H1><A NAME="SECTION000110000000000000000">
+About this document ...</A>
+</H1>
+ <STRONG>RL-Glue 3.0 Overview</STRONG><P>
+This document was generated using the
+<A HREF="http://www.latex2html.org/"><STRONG>LaTeX</STRONG>2<tt>HTML</tt></A> translator Version 2002-2-1 (1.71)
+<P>
+Copyright &#169; 1993, 1994, 1995, 1996,
+<A HREF="http://cbl.leeds.ac.uk/nikos/personal.html">Nikos Drakos</A>, 
+Computer Based Learning Unit, University of Leeds.
+<BR>
+Copyright &#169; 1997, 1998, 1999,
+<A HREF="http://www.maths.mq.edu.au/~ross/">Ross Moore</A>, 
+Mathematics Department, Macquarie University, Sydney.
+<P>
+The command line arguments were: <BR>
+ <STRONG>latex2html</STRONG> <TT>Glue-Overview.tex -split 0 -dir html -mkdir -title 'RL-Glue 3.0' -local_icons -math</TT>
+<P>
+The translation was initiated by Brian Tanner on 2009-02-13<HR>
+<!--Navigation Panel-->
+<IMG WIDTH="81" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next_inactive" SRC="nx_grp_g.png"> 
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up_g.png"> 
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev_g.png">   
+<BR>
+<!--End of Navigation Panel-->
+<ADDRESS>
+Brian Tanner
+2009-02-13
+</ADDRESS>
+</BODY>
+</HTML>
