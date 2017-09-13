@@ -55,7 +55,7 @@ For MORL-Glue, only the Java codec is currently available.
 
 MORL-Glue, like RL-Glue, uses the GNU autotools build framework.
 
-From the `morlglue` directory, run
+If you have downloaded a source tarball, from the `morlglue-server` directory, run
 
 ```
 configure && make && make install
@@ -64,6 +64,8 @@ configure && make && make install
 Depending on your distribution, you may need to `sudo make install`.
 
 You should now be able to run `morlglue` from the command prompt.
+
+If you have cloned the Git repository, you may need to rerun the autotools. See the README for `morlglue-server` for more details.
 
 ### Windows
 
