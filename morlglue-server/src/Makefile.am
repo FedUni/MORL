@@ -2,12 +2,8 @@
 GLUE_RELEASE=3:0:0
 GLUE_VERSION=3:0:0
 
-EXTRA_DIST=rl_glue.1
-
-if MINGW
-  WINFLAGS = -lws2_32
-endif
-man_MANS = rl_glue.1
+EXTRA_DIST=morl_glue.1
+man_MANS = morl_glue.1
 
 EXTRA_C_FLAGS=-O2 -g
 lib_LTLIBRARIES = librlutils.la librlglue.la librlgluenetdev.la
@@ -40,12 +36,12 @@ librlgluenetdev_la_LIBADD= librlutils.la
 librlgluenetdev_la_includedir=$(includedir)/rlglue/network
 librlgluenetdev_la_include_HEADERS = rlglue/network/RL_network.h
 
-bin_PROGRAMS = rl_glue
+bin_PROGRAMS = morl_glue
 
-#rl_glue is the executable RL-Glue server that manages the communications between codecs for 
-#environments, agents, and experiments
-rl_glue_SOURCES = RL_network_experiment.c RL_server_environment.c RL_network_agent.c RL_network_glue.c RL_server_experiment.c RL_glue.c RL_network_environment.c RL_server_agent.c RL_network_glue.h rlglue/Agent_common.h rlglue/Environment_common.h rlglue/RL_common.h rlglue/RL_glue.h
+# morl_glue is the executable RL-Glue server that manages the communications between codecs for 
+# environments, agents, and experiments
+morl_glue_SOURCES = RL_network_experiment.c RL_server_environment.c RL_network_agent.c RL_network_glue.c RL_server_experiment.c RL_glue.c RL_network_environment.c RL_server_agent.c RL_network_glue.h rlglue/Agent_common.h rlglue/Environment_common.h rlglue/RL_common.h rlglue/RL_glue.h
 #This is basically a no-op suggested by: http://www.gnu.org/software/libtool/manual/automake/Libtool-Issues.html to solve a problem where because both targets build rlglue.c
-rl_glue_CFLAGS = $(AM_CFLAGS) -Wall -pedantic -std=c99 $(EXTRA_C_FLAGS)
+morl_glue_CFLAGS = $(AM_CFLAGS) -Wall -pedantic -std=c99 $(EXTRA_C_FLAGS)
 #Taking this out because GDB refuses to look it up when debugging rl_glue
-rl_glue_LDADD   = librlgluenetdev.la $(WINFLAGS)
+morl_glue_LDADD   = librlutils.la librlgluenetdev.la

@@ -1,2 +1,3 @@
-SUBDIRS = src tests
-EXTRA_DIST=docs ChangeLog examples README.txt INSTALL LICENSE-2.0.txt
+ACLOCAL_AMFLAGS= -I m4
+SUBDIRS = src
+EXTRA_DIST=docs README.md INSTALL LICENSE-2.0.txt

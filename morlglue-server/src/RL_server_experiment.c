@@ -24,7 +24,11 @@
 #include <config.h>
 #endif
 
-#define VERSION "3:0:0"
+#ifndef VERSION
+/* Handle non-autotools compilation, through eg. Visual Studio */
+/* TODO: Move to the VS configuration */
+#define VERSION "3.0.0"
+#endif
 
 #include <stdio.h> /* fprintf */
 #include <assert.h> /* assert */
@@ -491,7 +495,7 @@ int main(int argc, char** argv) {
         if (strlen(argv[1]) == 4) {
             fprintf(stdout, "%s\n", VERSION);
         } else {
-            fprintf(stdout, usageBuffer);
+            fprintf(stdout, "%s", usageBuffer);
         }
         exit(1);
     }

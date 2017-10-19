@@ -1,34 +1,23 @@
-AC_INIT(src/RL_glue.c)
-AC_CONFIG_AUX_DIR(config)
-AM_INIT_AUTOMAKE(rlglue,3.04)
+AC_INIT([morlglue], [3.0.0], [c.foale@federation.edu.au])
+AM_INIT_AUTOMAKE([foreign -Wall -Werror])
 AC_PROG_CC
 AC_PROG_INSTALL
-AC_PROG_LIBTOOL
-AM_PROG_LIBTOOL
+AM_PROG_AR
 
-AM_MAINTAINER_MODE
+AC_CONFIG_MACRO_DIR([m4])
 
-# Host filesystem options
-case "${host}" in
-  *mingw*)
-    AC_DEFINE(HAVE_MINGW, 1,
-      [Define if we should use the Windows socket headers. ])
-    ;;
-esac
+LT_INIT
 
-AC_ARG_ENABLE(mingw,
-[  --enable-mingw    Add libs to cross compile for mingw],
-[case "${enableval}" in
-  yes) mingw=true ;;
-  no)  mingw=false ;;
-  *) AC_MSG_ERROR(bad value ${enableval} for --enable-mingw) ;;
-esac],[mingw=false])
 
-AM_CONDITIONAL(MINGW, test x$mingw = xtrue)
+# AM_MAINTAINER_MODE
 
 AC_CHECK_HEADERS([sys/time.h])
 AC_CHECK_FUNCS([gettimeofday])
 
-AC_CONFIG_HEADERS(config/config.h)
+AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_FILES([
+  Makefile
+  src/Makefile
+])
 
-AC_OUTPUT(Makefile src/Makefile tests/Makefile)
+AC_OUTPUT
