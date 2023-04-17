@@ -33,6 +33,7 @@ MORL-Glue includes a large number of standard RL and MORL benchmark problems:
 - `SpaceExploration` - The Space Exploration benchmark as described in [Vamplew et al (2017b)][vamplew2017b]
 - `BonusWorld` - An episodic 2D grid-world with 3 objectives - 2 are terminal-only, and the other is the time objective. As described in [Vamplew et al (2017b)][vamplew2017b]
 - `ResourceGathering` - The resource collection problem from [Barrett & Narayanan (2008)][barrett2008]
+- `Space Traders` - A simple Stochastic State Transitions MOMDP problem from [Vamplew et al (2022)][vamplew2022]
 
 ### Experiments
 
@@ -82,3 +83,4 @@ Visual Studio 2015 solutions are available if you wish to build your own version
 [barrett2008]: https://doi.org/10.1145/1390156.1390162 "Learning all optimal policies with multiple criteria"
 [gabor1998]: http://dl.acm.org/citation.cfm?id=657298 "Multi-criteria Reinforcement Learning"
 [issabekov2012]: http://dx.doi.org/10.1007/978-3-642-35101-3_53 "An Empirical Comparison of Two Common Multiobjective Reinforcement Learning Algorithms"
+[vamplew2022]: https://doi.org/10.1007/s00521-021-05859-1 "The impact of environmental stochasticity on value-based multiobjective reinforcement learning"

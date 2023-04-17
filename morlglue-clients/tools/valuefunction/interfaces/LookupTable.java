@@ -1,7 +1,10 @@
 package tools.valuefunction.interfaces;
 
 import java.util.ArrayList;
+import java.util.Random;
 import org.rlcommunity.rlglue.codec.types.Reward;
+import tools.valuefunction.Softmax;
+import tools.valuefunction.TLO;
 
 public abstract class LookupTable extends ValueFunction {
     
@@ -9,6 +12,13 @@ public abstract class LookupTable extends ValueFunction {
     protected final int numberOfObjectives;
     protected final int numberOfActions;
     protected final int numberOfStates;
+    protected Random r = null;
+
+    // constants to label the different exploration strategies
+	public static final int EGREEDY = 0;
+	public static final int SOFTMAX_TOURNAMENT = 1;
+	public static final int SOFTMAX_ADDITIVE_EPSILON = 2;
+    protected int explorationStrategy = 0; // default is egreedy
     
     protected ArrayList<double[][]> valueFunction = null;
     protected double[] errors = null;
@@ -17,6 +27,7 @@ public abstract class LookupTable extends ValueFunction {
         this.numberOfObjectives = numberOfObjectives;
         this.numberOfActions = numberOfActions;
         this.numberOfStates = numberOfStates;
+        r = new Random(499);
         
         valueFunction = new ArrayList<>();
         for(int i=0 ; i<numberOfObjectives ; i++) {
@@ -37,6 +48,57 @@ public abstract class LookupTable extends ValueFunction {
         errors = new double[numberOfObjectives];
         
     }
+
+        // set the exploration strategy
+        public void setExplorationStrategy(int ex)
+        {
+            explorationStrategy = ex;
+        }
+        
+        // returns a String representing the exploration strategy
+        public static String explorationStrategyToString(int ex)
+        {
+            switch (ex)
+            {
+                case EGREEDY: return "eGreedy";
+                case SOFTMAX_TOURNAMENT: return "softmax_t";
+                case SOFTMAX_ADDITIVE_EPSILON: return "softmax_+E";
+                default: return "Unknown";
+            }
+        }
+        
+        abstract public int chooseGreedyAction(int state);
+        
+        // simple eGreedy selection
+        private int eGreedy(double epsilon, int state)
+        {
+            if (r.nextDouble()<=epsilon)
+                return r.nextInt(numberOfActions);
+            else
+                return chooseGreedyAction(state);
+        }
+        
+        // softmax selection based on tournament score (i.e. the number of actions which each action TLO-dominates)
+        abstract protected int softmaxTournament(double temperature, int state);
+        
+        // softmax selection based on each action's additive epsilon score
+        abstract protected int softmaxAdditiveEpsilon(double temperature, int state);
+        
+        // This will call one of a variety of different exploration approaches
+        public int choosePossiblyExploratoryAction(double parameter, int state)
+        {
+            if (explorationStrategy==EGREEDY)
+                return eGreedy(parameter, state);
+            else if (explorationStrategy==SOFTMAX_TOURNAMENT)
+                return softmaxTournament(parameter, state);
+            else if (explorationStrategy==SOFTMAX_ADDITIVE_EPSILON)
+                return softmaxAdditiveEpsilon(parameter, state);
+            else
+            {
+                System.out.println("Error - undefined exploration strategy" + explorationStrategy);
+                return -1; // should cause a crash to halt proceedings
+            }	
+        }
     
     @Override
     public void calculateErrors(int action, int previousState, int greedyAction, int newState, double gamma, Reward reward) {
@@ -122,6 +184,24 @@ public abstract class LookupTable extends ValueFunction {
         }
         return result;
     }
+
+        // Print the Q-values for all actions in the specified state, in CSV format
+        public void printQValues(int state)
+        {
+            System.out.print("State " + state + ", ");
+            for (int action=0; action<numberOfActions; action++)
+            {
+                System.out.print("[");
+                for (int i = 0; i < numberOfObjectives; i++) 
+                {
+                    double[][] qValues = valueFunction.get(i);
+                    System.out.print(qValues[ action ][ state ]+" ");
+                } 
+                System.out.print("], ");
+            }
+            System.out.println();
+        }
+        
     
     public int getNumberOfObjectives() {
         return numberOfObjectives;

@@ -1,3 +1,6 @@
+// A modified version of the LookupTable to allow for conditioning of decisions based on the augmented state (ie including
+// information about actual or expected rewards accumulated during the current episode prior to applying the thresholding operator).
+
 package tools.valuefunction;
 
 import java.io.DataInputStream;
@@ -7,89 +10,72 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Random;
 
 import tools.valuefunction.interfaces.ActionSelector;
 import tools.valuefunction.interfaces.LookupTable;
 
-public class TLO_LookupTable extends LookupTable implements ActionSelector 
+public class TLO_MOSS_LookupTable extends LookupTable implements ActionSelector 
 {
-	// constants to label the different exploration strategies
-	public static final int EGREEDY = 0;
-	public static final int SOFTMAX_TOURNAMENT = 1;
-	public static final int SOFTMAX_ADDITIVE_EPSILON = 2;
-	
-    
-    Random r = null;
-    int explorationStrategy = 0; // default is egreedy
-    double thresholds[];
     double thisStateValues[][];
+    double accumlatedRewards[]; //accumulated rewards // array of dimensionality one less than number of objectives
+    double stateVisitedProbability;
+    double estimateOtherStateReturns[]; // array of dimensionality one less than number of objectives
 
-    public TLO_LookupTable( int numberOfObjectives, int numberOfActions, int numberOfStates, int initValue, double thresholds[]) 
+    double thresholds[];
+    int numThresholds; // will be numObjectives minus 1
+
+    public TLO_MOSS_LookupTable( int numberOfObjectives, int numberOfActions, int numberOfStates, int initValue, 
+    								double theseThresholds[]) 
     {
-        super(numberOfObjectives, numberOfActions, numberOfStates, initValue);
-        r = new Random(499);    
-        this.thresholds = thresholds;
-        thisStateValues = new double[numberOfActions][numberOfObjectives];
-    }
-    
-    // set the exploration strategy
-    public void setExplorationStrategy(int ex)
-    {
-    	explorationStrategy = ex;
-    }
-    
-    // returns a String representing the exploration strategy
-    public static String explorationStrategyToString(int ex)
-    {
-    	switch (ex)
-    	{
-    		case EGREEDY: return "eGreedy";
-    		case SOFTMAX_TOURNAMENT: return "softmax_t";
-    		case SOFTMAX_ADDITIVE_EPSILON: return "softmax_+E";
-    		default: return "Unknown";
-    	}
-    }
-    
-    // for debugging purposes - print out Q- values for all actions for the current state
-    public void printCurrentStateValues(int state)
-    {
-    	getActionValues(state); // copy the action values into the 2D array thisStateValues
-    	System.out.print("State " + state + ": ");
-		for (int a=0; a<numberOfActions; a++)
-		{
-			System.out.print("a"+a+" (");
-			for (int obj=0; obj<numberOfObjectives; obj++)
-			{
-				System.out.print(thisStateValues[a][obj]+",");
-			}
-			System.out.print(") ");
-		}  
-		System.out.println();
+        super(numberOfObjectives, numberOfActions, numberOfStates, initValue); 
+        thresholds = theseThresholds.clone();
+        numThresholds = numberOfObjectives -1;
+        thisStateValues = new double[numberOfActions][numberOfObjectives]; 
+        accumlatedRewards = new double[numThresholds];
+        stateVisitedProbability =1;
+        estimateOtherStateReturns = new double[numThresholds];
+        for (int i=0; i<numThresholds; i++)
+        {
+        	accumlatedRewards[i] = 0.0;
+        }
     }
     
     // This is a bit of a hack to get around the fact that the structure of Rustam's lookup table doesn't map nicely
     // on to my TLO library functions. The whole Agent and ValueFunction structure of Rustam's code needs to be refactored at some point
-    // Copies the q-values for the current state into the 2 dimensional arraythisStateValues index by [action][objective]
+    // Combine the state-action values and the conditioning Values together into thisStateValues
     private void getActionValues(int state)
     {
-    	for (int obj=0; obj<numberOfObjectives; obj++)
-    	{
-    		double[][] thisObjQ = valueFunction.get(obj);
-    		for (int a=0; a<numberOfActions; a++)
-    		{
-    			thisStateValues[a][obj] = thisObjQ[a][state];
-    		}
-    	}    	
+		for (int a=0; a<numberOfActions; a++)
+		{
+			for (int i=0; i<numThresholds; i++)
+			{
+				thisStateValues[a][i] = stateVisitedProbability*(valueFunction.get(i)[a][state] + accumlatedRewards[i])
+                                        +(1-stateVisitedProbability)*estimateOtherStateReturns[i];
+			}
+			// the final objective doesn't need to be conditioned as no thresholding is applied to it
+			thisStateValues[a][numThresholds] = valueFunction.get(numThresholds)[a][state];
+		}
+    }
+    
+    // accumulated rewards, probabilityOfThisState, estimated return in episodes where s is not visited 
+    public void setConditioningValues(double accumulatedReturns[], double probability, double estimatedReturnNotVisited[])
+    {
+    	stateVisitedProbability = probability;
+        for (int i=0; i<numThresholds; i++)
+        {
+            accumlatedRewards[i] = accumulatedReturns[i] ;
+            estimateOtherStateReturns[i] = estimatedReturnNotVisited[i];
+        }
     }
 
     @Override
     public int chooseGreedyAction(int state) 
     {
     	getActionValues(state);
-    	return TLO.greedyAction(thisStateValues, thresholds); 
+    	int greedy = TLO.greedyAction(thisStateValues, thresholds); 
+    	return greedy;
     }
+    
     
     // returns true if action is amongst the greedy actions for the specified
     // state, otherwise false
@@ -100,16 +86,7 @@ public class TLO_LookupTable extends LookupTable implements ActionSelector
     	// this action is greedy if it is TLO-equal to the greedily selected action
     	return (TLO.compare(thisStateValues[action], thisStateValues[best], thresholds)==0);
     }
-    
-    // simple eGreedy selection
-    private int eGreedy(double epsilon, int state)
-    {
-    	if (r.nextDouble()<=epsilon)
-    		return r.nextInt(numberOfActions);
-    	else
-    		return chooseGreedyAction(state);
-    }
-    
+       
     // softmax selection based on tournament score (i.e. the number of actions which each action TLO-dominates)
     protected int softmaxTournament(double temperature, int state)
     {
@@ -124,25 +101,7 @@ public class TLO_LookupTable extends LookupTable implements ActionSelector
     	int best = chooseGreedyAction(state); // as a side-effect this will also set up the Q-values array
     	double scores[] = TLO.getInverseAdditiveEpsilonScore(thisStateValues,best);
     	return Softmax.getAction(scores,temperature,best);
-    }
-    
-    // This will call one of a variety of different exploration approaches
-    public int choosePossiblyExploratoryAction(double parameter, int state)
-    {
-    	if (explorationStrategy==EGREEDY)
-    		return eGreedy(parameter, state);
-    	else if (explorationStrategy==SOFTMAX_TOURNAMENT)
-    		return softmaxTournament(parameter, state);
-    	else if (explorationStrategy==SOFTMAX_ADDITIVE_EPSILON)
-    		return softmaxAdditiveEpsilon(parameter, state);
-    	else
-    	{
-    		System.out.println("Error - undefined exploration strategy" + explorationStrategy);
-    		return -1; // should cause a crash to halt proceedings
-    	}
-    	
-    }
-    
+    }    
 
     public double[] getThresholds() {
         return thresholds;
@@ -151,8 +110,12 @@ public class TLO_LookupTable extends LookupTable implements ActionSelector
     public void setThresholds(double[] thresholds) {
         this.thresholds = thresholds;
     }
+
+    public double[][] getThisStateValues(){
+        return thisStateValues;
+    }
     
-     public void saveValueFunction(String theFileName) {
+    public void saveValueFunction(String theFileName) {
     	System.out.println(theFileName);
         for (int s = 0; s < numberOfStates; s++) {
             for (int a = 0; a < numberOfActions; a++) {

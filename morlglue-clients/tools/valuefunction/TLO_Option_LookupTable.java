@@ -7,50 +7,23 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Random;
 
 import tools.valuefunction.interfaces.ActionSelector;
 import tools.valuefunction.interfaces.LookupTable;
 
-public class TLO_LookupTable extends LookupTable implements ActionSelector 
+public class TLO_Option_LookupTable extends LookupTable implements ActionSelector 
 {
-	// constants to label the different exploration strategies
-	public static final int EGREEDY = 0;
-	public static final int SOFTMAX_TOURNAMENT = 1;
-	public static final int SOFTMAX_ADDITIVE_EPSILON = 2;
-	
-    
-    Random r = null;
-    int explorationStrategy = 0; // default is egreedy
     double thresholds[];
     double thisStateValues[][];
 
-    public TLO_LookupTable( int numberOfObjectives, int numberOfActions, int numberOfStates, int initValue, double thresholds[]) 
+    public TLO_Option_LookupTable( int numberOfObjectives, int numberOfOptions, int numberOfStates, int initValue, double thresholds[]) 
     {
-        super(numberOfObjectives, numberOfActions, numberOfStates, initValue);
-        r = new Random(499);    
+        super(numberOfObjectives, numberOfOptions, numberOfStates, initValue);    
         this.thresholds = thresholds;
-        thisStateValues = new double[numberOfActions][numberOfObjectives];
+        thisStateValues = new double[numberOfOptions][numberOfObjectives];
     }
     
-    // set the exploration strategy
-    public void setExplorationStrategy(int ex)
-    {
-    	explorationStrategy = ex;
-    }
-    
-    // returns a String representing the exploration strategy
-    public static String explorationStrategyToString(int ex)
-    {
-    	switch (ex)
-    	{
-    		case EGREEDY: return "eGreedy";
-    		case SOFTMAX_TOURNAMENT: return "softmax_t";
-    		case SOFTMAX_ADDITIVE_EPSILON: return "softmax_+E";
-    		default: return "Unknown";
-    	}
-    }
+
     
     // for debugging purposes - print out Q- values for all actions for the current state
     public void printCurrentStateValues(int state)
@@ -100,16 +73,7 @@ public class TLO_LookupTable extends LookupTable implements ActionSelector
     	// this action is greedy if it is TLO-equal to the greedily selected action
     	return (TLO.compare(thisStateValues[action], thisStateValues[best], thresholds)==0);
     }
-    
-    // simple eGreedy selection
-    private int eGreedy(double epsilon, int state)
-    {
-    	if (r.nextDouble()<=epsilon)
-    		return r.nextInt(numberOfActions);
-    	else
-    		return chooseGreedyAction(state);
-    }
-    
+       
     // softmax selection based on tournament score (i.e. the number of actions which each action TLO-dominates)
     protected int softmaxTournament(double temperature, int state)
     {
@@ -126,23 +90,7 @@ public class TLO_LookupTable extends LookupTable implements ActionSelector
     	return Softmax.getAction(scores,temperature,best);
     }
     
-    // This will call one of a variety of different exploration approaches
-    public int choosePossiblyExploratoryAction(double parameter, int state)
-    {
-    	if (explorationStrategy==EGREEDY)
-    		return eGreedy(parameter, state);
-    	else if (explorationStrategy==SOFTMAX_TOURNAMENT)
-    		return softmaxTournament(parameter, state);
-    	else if (explorationStrategy==SOFTMAX_ADDITIVE_EPSILON)
-    		return softmaxAdditiveEpsilon(parameter, state);
-    	else
-    	{
-    		System.out.println("Error - undefined exploration strategy" + explorationStrategy);
-    		return -1; // should cause a crash to halt proceedings
-    	}
-    	
-    }
-    
+   
 
     public double[] getThresholds() {
         return thresholds;
